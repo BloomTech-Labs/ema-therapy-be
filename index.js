@@ -3,7 +3,7 @@ const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const db = require('./models/index');
+const DB = require('./models/index');
 // const schema = require('./schema/schema')
 
 const app = express();
@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(morgan("combined"));
-const app = express();
+
 
 // app.use('/graphql', graphqlHTTP({
 //     schema,
@@ -20,6 +20,8 @@ const app = express();
 // }))
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-    console.log(`now listening for requests on port ${PORT}`);
-})
+DB.connectDB().then(async () => {
+    app.listen(PORT, () =>
+        console.log(`Example app listening on port ${PORT}!`),
+    );
+});
