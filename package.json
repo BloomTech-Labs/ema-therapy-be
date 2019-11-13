@@ -1,0 +1,28 @@
+{
+  "name": "ema-therapy-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Lambda-School-Labs/ema-therapy-be.git",
+  "author": "Jeffrey Whitaker <jeffrey.david.whitaker@zoho.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "test": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "express-jwt": "^5.3.1",
+    "graphql": "^14.5.8",
+    "helmet": "^3.21.2",
+    "jwks-rsa": "^1.6.0",
+    "mongoose": "^5.7.10",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
