@@ -23,6 +23,20 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "husky": ">=1",
+    "lint-staged": ">=8",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
