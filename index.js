@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
@@ -21,7 +23,7 @@ app.use(morgan("combined"));
 
 
 
-//function fro checking JWT
+//function for checking JWT needs authConfig
 // const checkJwt = jwt({
 //     secret: jwksRsa.expressJwtSecret({
 //         cache: true,
