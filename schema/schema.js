@@ -1,5 +1,5 @@
-const graphql = require('graphql');
-const User = require('../models/user')
+const graphql = require('graphql')
+const user = require('../models/user')
 
 const {
     GraphQLObjectType,
@@ -25,7 +25,7 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(UserType),
             resolve(parent, args) {
                 //return users
-                return User.find({})
+                return user.find({})
             }
         },
     }
