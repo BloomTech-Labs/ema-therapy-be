@@ -9,6 +9,7 @@ const {
     GraphQLNonNull } = graphql;
 
 const UserType = new GraphQLObjectType({
+
     name: 'user',
     fields: () => ({
         name: { type: GraphQLString },
