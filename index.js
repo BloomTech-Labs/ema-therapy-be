@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
@@ -8,13 +6,13 @@ const helmet = require('helmet');
 
 require('dotenv').config();
 
-//db dependencies
+// db dependencies
 const DB = require('./models/index');
 const schema = require('./schema/schema');
 
 // authorization dep
-const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
+// const jwt = require('express-jwt');
+// const jwksRsa = require('jwks-rsa');
 
 const app = express();
 

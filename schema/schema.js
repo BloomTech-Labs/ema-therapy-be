@@ -49,9 +49,9 @@ const RootQuery = new GraphQLObjectType({
     },
     user: {
       type: UserType,
-      args: { id: { type: GraphQLID } },
+      args: { sub: { type: GraphQLID } },
       resolve(_, args) {
-        return User.findById(args.id);
+        return User.findOne({ sub: args.sub });
       },
     },
   },
@@ -110,7 +110,7 @@ const Mutation = new GraphQLObjectType({
         mood: { type: new GraphQLNonNull(GraphQLInt) },
         intensity: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve(parent, args) {
+      resolve(_, args) {
         return Mood.findByIdAndUpdate(
           args.id,
           { mood: args.mood, intensity: args.intensity },
