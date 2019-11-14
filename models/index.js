@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
 
+const DB_URL = process.env.DB_URL;
 
-
-// uri string needs to be changed to a .env var
 const connectDB = () => {
-    return mongoose.connect(process.env.DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
-}
+  return mongoose.connect(DB_URL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
+};
+
 mongoose.connection.once('open', () => {
-    console.log('connected to database');
+  console.log('connected to database');
 });
 
 module.exports = {
-    connectDB: connectDB
-}
+  connectDB: connectDB,
+};

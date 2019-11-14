@@ -6,9 +6,11 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 
+require('dotenv').config();
+
 //db dependencies
 const DB = require('./models/index');
-const schema = require('./schema/schema')
+const schema = require('./schema/schema');
 
 // authorization dep
 const jwt = require('express-jwt');
@@ -19,9 +21,7 @@ const app = express();
 // cors enables cors requests, helmet enhances security, morgan views server traffic
 app.use(cors());
 app.use(helmet());
-app.use(morgan("combined"));
-
-
+app.use(morgan('combined'));
 
 //function for checking JWT needs authConfig
 // const checkJwt = jwt({
@@ -38,16 +38,16 @@ app.use(morgan("combined"));
 //     algorithms: ['RS256']
 // });
 
-
-app.use('/backend', graphqlHTTP({
+app.use(
+  '/backend',
+  graphqlHTTP({
     schema,
-    graphiql: true
-}))
+    graphiql: true,
+  }),
+);
 
 const PORT = process.env.PORT || 4000;
 
 DB.connectDB().then(async () => {
-    app.listen(PORT, () =>
-        console.log(`Example app listening on port ${PORT}!`),
-    );
+  app.listen(PORT, () => console.log(`🚀  Server listening on port ${PORT}!`));
 });
