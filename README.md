@@ -172,7 +172,7 @@ In order for the app to function correctly, the user must set up their own envir
 create a .env file that includes the following:
 
     *  PORT - dynamic port the server is listening on
-    *  MONGGODB_URI - MongoDB connection string
+    *  MONGODB_URI - MongoDB connection string
 
 ## Contributing
 
