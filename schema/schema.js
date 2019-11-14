@@ -110,7 +110,7 @@ const Mutation = new GraphQLObjectType({
         mood: { type: new GraphQLNonNull(GraphQLInt) },
         intensity: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve(parent, args) {
+      resolve(_, args) {
         return Mood.findByIdAndUpdate(
           args.id,
           { mood: args.mood, intensity: args.intensity },
