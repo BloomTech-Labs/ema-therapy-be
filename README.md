@@ -56,7 +56,7 @@ GET User By Id
     moods {
       // To Do - add id in this query
       mood
-			intensity
+      intensity
       createdAt
     }
   }
@@ -149,8 +149,8 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
-_ PORT - Dynamic port the server is listening on.
-_ DB_URL - the mongoDB connection string
+    *  PORT - Dynamic port the server is listening on.
+    *  DB_URL - the MongoDB connection string
 
 ## Contributing
 
