@@ -37,9 +37,9 @@ GET Users
 ```
 {
   users {
-    // To Do - add id in this query
     sub
     email
+    createdAt
   }
 }
 ```
@@ -52,12 +52,12 @@ GET User By Id
     // To Do - add id in this query
     sub
     email
-    // To Do - createdAt can't be queried
+    createdAt
     moods {
       // To Do - add id in this query
       mood
 			intensity
-      // To Do - createdAt can't be queried
+      createdAt
     }
   }
 }
@@ -72,7 +72,6 @@ mutation {
   addUser(email:"herman@email.com", sub: "15621266"){
     email
     sub
-     // To Do - createdAt can't be queried
   }
 }
 ```
@@ -149,8 +148,8 @@ mutation {
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-  
- _ PORT - Dynamic port the server is listening on.
+
+_ PORT - Dynamic port the server is listening on.
 _ DB_URL - the mongoDB connection string
 
 ## Contributing
