@@ -47,5 +47,5 @@ app.use(
 const PORT = process.env.PORT || 4000;
 
 DB.connectDB().then(async () => {
-  app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}!`));
+  app.listen(PORT, () => console.log(`🚀  Server listening on port ${PORT}!`));
 });
