@@ -72,7 +72,6 @@ mutation {
   addUser(email:"herman@email.com", sub: "15621266"){
     email
     sub
-     // To Do - createdAt can't be queried
   }
 }
 ```
