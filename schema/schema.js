@@ -15,6 +15,7 @@ const {
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
+    id: { type: GraphQLID },
     email: { type: GraphQLString },
     sub: { type: GraphQLString },
     createdAt: { type: GraphQLString },
@@ -30,6 +31,7 @@ const UserType = new GraphQLObjectType({
 const MoodType = new GraphQLObjectType({
   name: 'Mood',
   fields: () => ({
+    id: { type: GraphQLID },
     createdAt: { type: GraphQLString },
     mood: { type: GraphQLInt },
     intensity: { type: GraphQLInt },

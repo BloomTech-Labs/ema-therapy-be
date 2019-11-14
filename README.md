@@ -49,12 +49,12 @@ GET User By Id
 ```
 {
   user(id: "5dcc9396d36d5ecc7833a218") {
-    // To Do - add id in this query
+    id
     sub
     email
     createdAt
     moods {
-      // To Do - add id in this query
+      id
       mood
       intensity
       createdAt
