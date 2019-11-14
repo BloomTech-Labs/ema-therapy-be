@@ -37,6 +37,7 @@ GET Users
 ```
 {
   users {
+    id
     sub
     email
     createdAt
@@ -81,6 +82,27 @@ addMood
 ```
 mutation {
   addMood(mood: 2, intensity:5, userId:"5dcc9396d36d5ecc7833a218"){
+    mood
+    intensity
+  }
+}
+```
+
+removeMood
+
+```
+mutation {
+  removeMood(id:"5dcc9396d36d5ecc7833a218"){
+    mood
+  }
+}
+```
+
+editMood
+
+```
+mutation {
+  editMood(id:"5dcca5d09c755dd52457af86", mood:4, intensity:10){
     mood
     intensity
   }

@@ -103,6 +103,25 @@ const Mutation = new GraphQLObjectType({
         return remMood;
       },
     },
+    editMood: {
+      type: MoodType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        mood: { type: new GraphQLNonNull(GraphQLInt) },
+        intensity: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve(parent, args) {
+        return Mood.findByIdAndUpdate(
+          args.id,
+          { mood: args.mood, intensity: args.intensity },
+          (error) => {
+            if (error) {
+              return next(error);
+            }
+          },
+        );
+      },
+    },
   },
 });
 
