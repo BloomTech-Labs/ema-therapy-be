@@ -90,6 +90,19 @@ const Mutation = new GraphQLObjectType({
         return mood.save();
       },
     },
+    removeMood: {
+      type: MoodType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(_, args) {
+        const remMood = Mood.findByIdAndRemove(args.id).exec();
+        if (!remMood) {
+          throw new Error('Error');
+        }
+        return remMood;
+      },
+    },
   },
 });
 
