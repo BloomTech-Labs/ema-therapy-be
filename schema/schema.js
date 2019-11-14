@@ -18,6 +18,12 @@ const UserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     sub: { type: GraphQLString },
     createdAt: { type: GraphQLInt },
+    moods: {
+      type: new GraphQLList(MoodType),
+      resolve(parent, args) {
+        return Mood.find({ userId: parent.id });
+      },
+    },
   }),
 });
 
