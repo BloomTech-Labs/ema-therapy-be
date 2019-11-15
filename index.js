@@ -3,6 +3,9 @@ const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const authConfig = require('./authconfig.json');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 require('dotenv').config();
 
@@ -22,22 +25,23 @@ app.use(helmet());
 app.use(morgan('combined'));
 
 //function for checking JWT needs authConfig
-// const checkJwt = jwt({
-//     secret: jwksRsa.expressJwtSecret({
-//         cache: true,
-//         rateLimit: true,
-//         jwksRequestsPerMinute: 5,
-//         jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
-//     }),
+const checkJwt = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`,
+  }),
 
-//     // Validate the audience and the issuer.
-//     audience: authConfig.audience, // name of api //identifier in settings
-//     issuer: `https://${authConfig.domain}/`, //local host
-//     algorithms: ['RS256']
-// });
+  // Validate the audience and the issuer.
+  audience: authConfig.audience, // name of api //identifier in settings
+  issuer: `https://${authConfig.domain}/`, //local host
+  algorithms: ['RS256'],
+});
 
 app.use(
   '/backend',
+  checkJwt,
   graphqlHTTP({
     schema,
     graphiql: true,
