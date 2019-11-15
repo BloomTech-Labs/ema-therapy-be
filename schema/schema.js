@@ -106,7 +106,7 @@ const Mutation = new GraphQLObjectType({
     editMood: {
       type: MoodType,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLString) },
+        id: { type: new GraphQLNonNull(GraphQLID) },
         mood: { type: new GraphQLNonNull(GraphQLInt) },
         intensity: { type: new GraphQLNonNull(GraphQLInt) },
       },

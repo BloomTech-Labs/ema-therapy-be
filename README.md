@@ -34,7 +34,7 @@ To get the server running locally:
 
 GET Users
 
-```
+```graphql
 {
   users {
     id
@@ -47,7 +47,7 @@ GET Users
 
 GET User By Id
 
-```
+```graphql
 {
   user(id: "5dcc9396d36d5ecc7833a218") {
     id
@@ -68,9 +68,9 @@ GET User By Id
 
 addUser
 
-```
+```graphql
 mutation {
-  addUser(email:"herman@email.com", sub: "15621266"){
+  addUser(email: "herman@email.com", sub: "15621266") {
     email
     sub
   }
@@ -79,9 +79,9 @@ mutation {
 
 addMood
 
-```
+```graphql
 mutation {
-  addMood(mood: 2, intensity:5, userId:"5dcc9396d36d5ecc7833a218"){
+  addMood(mood: 2, intensity: 5, userId: "5dcc9396d36d5ecc7833a218") {
     mood
     intensity
   }
@@ -90,9 +90,9 @@ mutation {
 
 removeMood
 
-```
+```graphql
 mutation {
-  removeMood(id:"5dcc9396d36d5ecc7833a218"){
+  removeMood(id: "5dcc9396d36d5ecc7833a218") {
     mood
   }
 }
@@ -100,9 +100,9 @@ mutation {
 
 editMood
 
-```
+```graphql
 mutation {
-  editMood(id:"5dcca5d09c755dd52457af86", mood:4, intensity:10){
+  editMood(id: "5dcca5d09c755dd52457af86", mood: 4, intensity: 10) {
     mood
     intensity
   }
