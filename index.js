@@ -1,21 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const authConfig = require('./authconfig.json');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-
-require('dotenv').config();
+const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./auth-config');
 
 // db dependencies
 const DB = require('./models/index');
 const schema = require('./schema/schema');
-
-// authorization dep
-// const jwt = require('express-jwt');
-// const jwksRsa = require('jwks-rsa');
 
 const app = express();
 
@@ -30,12 +25,12 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`,
+    jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
   }),
 
   // Validate the audience and the issuer.
-  audience: authConfig.audience, // name of api //identifier in settings
-  issuer: `https://${authConfig.domain}/`, //local host
+  audience: AUTH0_AUDIENCE, // name of api //identifier in settings
+  issuer: `https://${AUTH0_DOMAIN}/`, //local host
   algorithms: ['RS256'],
 });
 
@@ -48,7 +43,7 @@ app.use(
   }),
 );
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 DB.connectDB().then(async () => {
   app.listen(PORT, () => console.log(`🚀  Server listening on port ${PORT}!`));

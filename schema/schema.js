@@ -49,8 +49,23 @@ const RootQuery = new GraphQLObjectType({
     },
     user: {
       type: UserType,
-      args: { sub: { type: GraphQLID } },
-      resolve(_, args) {
+      args: {
+        sub: { type: GraphQLID },
+        email: { type: GraphQLString },
+      },
+      resolve: async (_, args) => {
+        // check if user exists
+        await User.count({ sub: args.sub }, (err, count) => {
+          if (err) console.log(err);
+          // add user if they do not exist
+          if (count === 0) {
+            let user = new User({
+              email: args.email,
+              sub: args.sub,
+            });
+            user.save();
+          }
+        });
         return User.findOne({ sub: args.sub });
       },
     },
