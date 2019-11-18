@@ -6,7 +6,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./auth-config');
+const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./config/auth-config');
 
 // db dependencies
 const DB = require('./models/index');
