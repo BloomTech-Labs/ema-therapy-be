@@ -62,7 +62,7 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve: async (_, args) => {
         // check if user exists
-        await User.countDocuments({ sub: args.sub }, (err, count) => {
+        await User.count({ sub: args.sub }, (err, count) => {
           if (err) console.log(err);
           // add user if they do not exist
           if (count === 0) {
