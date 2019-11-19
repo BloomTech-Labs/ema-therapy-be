@@ -10,6 +10,7 @@ const {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLID,
+  GraphQLFloat,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -34,9 +35,11 @@ const MoodType = new GraphQLObjectType({
   name: 'Mood',
   fields: () => ({
     id: { type: GraphQLID },
+    mood: { type: GraphQLString },
+    text: { type: GraphQLString },
+    anxietyLevel: { type: GraphQLInt },
+    sleep: { type: GraphQLFloat },
     createdAt: { type: GraphQLString },
-    mood: { type: GraphQLInt },
-    intensity: { type: GraphQLInt },
   }),
 });
 
@@ -89,8 +92,7 @@ const Mutation = new GraphQLObjectType({
         firstName: { type: GraphQLString },
         lastName: { type: GraphQLString },
       },
-      resolve(_, args, context) {
-        console.log('context', context);
+      resolve(_, args) {
         let user = new User({
           email: args.email,
           sub: args.sub,
@@ -103,14 +105,18 @@ const Mutation = new GraphQLObjectType({
     addMood: {
       type: MoodType,
       args: {
-        mood: { type: new GraphQLNonNull(GraphQLInt) },
-        intensity: { type: new GraphQLNonNull(GraphQLInt) },
+        mood: { type: new GraphQLNonNull(GraphQLString) },
+        text: { type: GraphQLString },
+        anxietyLevel: { type: GraphQLInt },
+        sleep: { type: GraphQLFloat },
         userId: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(_, args) {
         let mood = new Mood({
           mood: args.mood,
-          intensity: args.intensity,
+          text: args.text,
+          anxietyLevel: args.anxietyLevel,
+          sleep: args.sleep,
           userId: args.userId,
         });
         return mood.save();
