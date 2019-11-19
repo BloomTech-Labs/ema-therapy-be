@@ -18,6 +18,8 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID },
     email: { type: GraphQLString },
     sub: { type: GraphQLString },
+    firstName: { type: GraphQLString },
+    lastName: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     moods: {
       type: new GraphQLList(MoodType),
@@ -52,16 +54,20 @@ const RootQuery = new GraphQLObjectType({
       args: {
         sub: { type: GraphQLID },
         email: { type: GraphQLString },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
       },
       resolve: async (_, args) => {
         // check if user exists
-        await User.count({ sub: args.sub }, (err, count) => {
+        await User.countDocuments({ sub: args.sub }, (err, count) => {
           if (err) console.log(err);
           // add user if they do not exist
           if (count === 0) {
             let user = new User({
               email: args.email,
               sub: args.sub,
+              firstName: args.firstName,
+              lastName: args.lastName,
             });
             user.save();
           }
@@ -80,11 +86,16 @@ const Mutation = new GraphQLObjectType({
       args: {
         email: { type: new GraphQLNonNull(GraphQLString) },
         sub: { type: new GraphQLNonNull(GraphQLString) },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
       },
-      resolve(_, args) {
+      resolve(_, args, context) {
+        console.log('context', context);
         let user = new User({
           email: args.email,
           sub: args.sub,
+          firstName: args.firstName,
+          lastName: args.lastName,
         });
         return user.save();
       },
