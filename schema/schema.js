@@ -35,7 +35,7 @@ const MoodType = new GraphQLObjectType({
   name: 'Mood',
   fields: () => ({
     id: { type: GraphQLID },
-    mood: { type: GraphQLString },
+    mood: { type: GraphQLInt },
     text: { type: GraphQLString },
     anxietyLevel: { type: GraphQLInt },
     sleep: { type: GraphQLFloat },
@@ -105,7 +105,7 @@ const Mutation = new GraphQLObjectType({
     addMood: {
       type: MoodType,
       args: {
-        mood: { type: new GraphQLNonNull(GraphQLString) },
+        mood: { type: new GraphQLNonNull(GraphQLInt) },
         text: { type: GraphQLString },
         anxietyLevel: { type: GraphQLInt },
         sleep: { type: GraphQLFloat },
