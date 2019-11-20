@@ -10,7 +10,7 @@
 
 Staging env is deployed at: https://moodmuse.herokuapp.com/
 
-Access GraphQL with the endpoint `/backend`
+Access GraphQL with the endpoint `/backend`. Database requires an Auth token.
 
 ## 1️⃣ Getting started
 
@@ -21,11 +21,9 @@ To get the server running locally:
 - **yarn server** to start the local server
 - **yarn test** to start server using testing environment
 
-### Backend framework goes here
+### Node.js, Express, GraphQL, MongoDB/Mongoose
 
-🚫 Why did you choose this framework?
-
-- Point One
+- We chose our back-end technology to be flexible and easy to change as needed due to our project being a greenfield project. We knew that lots of changes will occur as the application develops and wanted to make setting up the database quick and painless.
 - Point Two
 - Point Three
 - Point Four
@@ -40,25 +38,41 @@ GET Users
     id
     sub
     email
-    createdAt
-  }
-}
-```
-
-GET User By Id
-
-```graphql
-{
-  user(id: "5dcc9396d36d5ecc7833a218") {
-    id
-    sub
-    email
+    firstName
+    lastName
     createdAt
     moods {
       id
       mood
-      intensity
+      text
+      anxietyLevel
+      sleep
       createdAt
+      userId
+    }
+  }
+}
+```
+
+GET User By Sub
+
+```graphql
+{
+  user(sub: "google-oauth2|000092941234568391234") {
+    id
+    sub
+    email
+    firstName
+    lastName
+    createdAt
+    moods {
+      id
+      mood
+      text
+      anxietyLevel
+      sleep
+      createdAt
+      userId
     }
   }
 }
@@ -66,52 +80,65 @@ GET User By Id
 
 ## Mutations
 
-addUser
+addMood by User ID
 
 ```graphql
 mutation {
-  addUser(email: "herman@email.com", sub: "15621266") {
-    email
-    sub
-  }
-}
-```
-
-addMood
-
-```graphql
-mutation {
-  addMood(mood: 2, intensity: 5, userId: "5dcc9396d36d5ecc7833a218") {
+  addMood(
+    mood: 2
+    text: "Today I was happy because I got a promotion at my job!"
+    anxietyLevel: 5
+    sleep: 7.5
+    userId: "5dcc9396d36d5ecc1234a218"
+  ) {
+    id
     mood
-    intensity
+    text
+    anxietyLevel
+    sleep
+    createdAt
+    userId
   }
 }
 ```
 
-removeMood
+removeMood by Mood ID
 
 ```graphql
 mutation {
   removeMood(id: "5dcc9396d36d5ecc7833a218") {
+    id
     mood
+    text
+    anxietyLevel
+    sleep
+    createdAt
   }
 }
 ```
 
-editMood
+editMood by Mood ID
 
 ```graphql
 mutation {
-  editMood(id: "5dcca5d09c755dd52457af86", mood: 4, intensity: 10) {
+  editMood(
+    mood: 3
+    text: "I was sad today because I wasn't able to make it to my friend's birthday"
+    anxietyLevel: 0
+    sleep: 8.0
+    id: "5dd4a493d3e27c123cc43af4"
+  ) {
+    id
     mood
-    intensity
+    text
+    anxietyLevel
+    sleep
+    createdAt
   }
 }
 ```
 
 # Data Model
-
-🚫This is just an example. Replace this with your data model
 
 #### 2️⃣ USERS
 
@@ -122,6 +149,8 @@ mutation {
   id: UUID
   sub: STRING
   email: STRING
+  firstName: STRING
+  lastName: STRING
   createdAt: TIMESTAMP
 }
 ```
@@ -134,8 +163,11 @@ mutation {
 {
   id: UUID
   mood: INT
-  intensity: INT
+  text: STRING
+  anxietyLevel: INT
+  sleep: DOUBLE/FLOAT
   createdAt: TIMESTAMP
+  userId: STRING
 }
 ```
 
@@ -173,6 +205,7 @@ create a .env file that includes the following:
 
     *  PORT - dynamic port the server is listening on
     *  MONGODB_URI - MongoDB connection string
+    *  NODE_ENV - Node environment
 
 ## Contributing
 
