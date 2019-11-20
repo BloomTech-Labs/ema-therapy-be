@@ -140,18 +140,26 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
         mood: { type: new GraphQLNonNull(GraphQLInt) },
-        intensity: { type: new GraphQLNonNull(GraphQLInt) },
+        text: { type: GraphQLString },
+        sleep: { type: GraphQLFloat },
+        anxietyLevel: { type: new GraphQLNonNull(GraphQLInt) },
       },
-      resolve(_, args) {
-        return Mood.findByIdAndUpdate(
+      async resolve(_, args) {
+        await Mood.findByIdAndUpdate(
           args.id,
-          { mood: args.mood, intensity: args.intensity },
+          {
+            mood: args.mood,
+            text: args.text,
+            sleep: args.sleep,
+            anxietyLevel: args.anxietyLevel,
+          },
           (error) => {
             if (error) {
               return next(error);
             }
           },
         );
+        return Mood.findById(args.id);
       },
     },
   },
