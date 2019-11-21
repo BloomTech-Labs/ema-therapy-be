@@ -1,9 +1,10 @@
 const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
 const User = require('../models/user');
 const { UsersField, UserField } = require('../schema/users');
+const { when } = require('jest-when');
 
-describe('users query', () => {
-  it('returns appropriate user data', () => {
+describe('multiple users query', () => {
+  it('returns appropriate array of users with user data', () => {
     const schema = new GraphQLSchema({
       query: new GraphQLObjectType({
         name: 'Query',
@@ -13,15 +14,15 @@ describe('users query', () => {
       }),
     });
     const query = `{
-            users {
-                id
-                email
-                sub
-                firstName
-                lastName
-                createdAt
-            }
-        }`;
+      users {
+        id
+        email
+        sub
+        firstName
+        lastName
+        createdAt
+      }
+    }`;
     const mockUser1 = {
       id: '8675309',
       email: 'test@help.com',
@@ -52,8 +53,8 @@ describe('users query', () => {
   });
 });
 
-describe('user query', () => {
-  it('finds user', () => {
+describe('single user query', () => {
+  it('returns appropriate user when count is 1 and sub is provided', () => {
     const schema = new GraphQLSchema({
       query: new GraphQLObjectType({
         name: 'Query',
@@ -62,16 +63,7 @@ describe('user query', () => {
         },
       }),
     });
-    const query = `{
-            user {
-                id
-                email
-                sub
-                firstName
-                lastName
-                createdAt
-            }
-        }`;
+
     const mockUser1 = {
       id: '867530900',
       email: 'test2@help.com',
@@ -81,11 +73,28 @@ describe('user query', () => {
       createdAt: `${Date.now()}`,
     };
 
-    jest.spyOn(User, 'findOne').mockReturnValue(Promise.resolve([mockUser1]));
+    const query = `{
+      user(sub: "${mockUser1.sub}") {
+        id
+        email
+        sub
+        firstName
+        lastName
+        createdAt
+      }
+    }`;
+
+    jest.spyOn(User, 'count').mockReturnValue(Promise.resolve(1));
+    const userFindOneSpy = jest.spyOn(User, 'findOne');
+
+    when(userFindOneSpy)
+      .calledWith({ sub: mockUser1.sub })
+      .mockReturnValue(mockUser1);
 
     return graphql(schema, query, {}, {}).then((result) => {
+      console.log(userFindOneSpy.mock.calls);
       expect(result).not.toBe(null);
-      expect(result.data).toEqual(mockUser1);
+      expect(result.data).toEqual({ user: mockUser1 });
     });
   });
 });
