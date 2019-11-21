@@ -8,6 +8,7 @@ const moodSchema = new Schema({
   sleep: Number,
   createdAt: { type: Date, default: Date.now },
   userId: String,
+  weather: String,
 });
 
 module.exports = mongoose.model('Mood', moodSchema);
