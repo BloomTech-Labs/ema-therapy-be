@@ -92,7 +92,51 @@ describe('single user query', () => {
       .mockReturnValue(mockUser1);
 
     return graphql(schema, query, {}, {}).then((result) => {
-      console.log(userFindOneSpy.mock.calls);
+      // console.log(userFindOneSpy.mock.calls);
+      expect(result).not.toBe(null);
+      expect(result.data).toEqual({ user: mockUser1 });
+    });
+  });
+
+  it('returns appropriate user when count is 0 and sub is provided', () => {
+    const schema = new GraphQLSchema({
+      query: new GraphQLObjectType({
+        name: 'Query',
+        fields: {
+          user: UserField,
+        },
+      }),
+    });
+
+    const mockUser1 = {
+      id: '1234567',
+      email: 'intelligentReference@help.com',
+      sub: 'justAfakeSub',
+      firstName: 'argh',
+      lastName: 'testsAreFun',
+      createdAt: `${Date.now()}`,
+    };
+
+    const query = `{
+      user(sub: "${mockUser1.sub}") {
+        id
+        email
+        sub
+        firstName
+        lastName
+        createdAt
+      }
+    }`;
+
+    jest.spyOn(User, 'count').mockReturnValue(Promise.resolve(0));
+    const userSaveSpy = jest.spyOn(User, 'save');
+
+    when(userSaveSpy)
+      .calledWith()
+      .mockReturnValue();
+
+    return graphql(schema, query, {}, {}).then((result) => {
+      // console.log(userFindOneSpy.mock.calls);
       expect(result).not.toBe(null);
       expect(result.data).toEqual({ user: mockUser1 });
     });

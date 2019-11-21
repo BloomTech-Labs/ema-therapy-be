@@ -21,6 +21,7 @@ const MoodType = new GraphQLObjectType({
     anxietyLevel: { type: GraphQLInt },
     sleep: { type: GraphQLFloat },
     createdAt: { type: GraphQLString },
+    weather: { type: GraphQLString },
   }),
 });
 
