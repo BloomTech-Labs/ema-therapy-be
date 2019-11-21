@@ -35,7 +35,7 @@ const checkJwt = jwt({
 
 app.use(
   '/backend',
-  //checkJwt,
+  checkJwt,
   graphqlHTTP({
     schema,
     graphiql: true,
