@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "nodemon index.js"
+    "test": "jest --watch --verbose"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -24,14 +24,19 @@
   },
   "devDependencies": {
     "husky": ">=1",
+    "jest": "^24.9.0",
     "lint-staged": ">=8",
     "nodemon": "^1.19.4",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "lint-staged": {
     "*.{js,css,json,md}": [
