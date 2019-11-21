@@ -1,6 +1,8 @@
 const graphql = require('graphql');
 const User = require('../models/user');
 const Mood = require('../models/mood');
+const { UserType, UsersField } = require('./users');
+const { MoodType } = require('./moods');
 
 const {
   GraphQLObjectType,
@@ -13,45 +15,10 @@ const {
   GraphQLFloat,
 } = graphql;
 
-const UserType = new GraphQLObjectType({
-  name: 'User',
-  fields: () => ({
-    id: { type: GraphQLID },
-    email: { type: GraphQLString },
-    sub: { type: GraphQLString },
-    firstName: { type: GraphQLString },
-    lastName: { type: GraphQLString },
-    createdAt: { type: GraphQLString },
-    moods: {
-      type: new GraphQLList(MoodType),
-      resolve(parent, args) {
-        return Mood.find({ userId: parent.id });
-      },
-    },
-  }),
-});
-
-const MoodType = new GraphQLObjectType({
-  name: 'Mood',
-  fields: () => ({
-    id: { type: GraphQLID },
-    mood: { type: GraphQLInt },
-    text: { type: GraphQLString },
-    anxietyLevel: { type: GraphQLInt },
-    sleep: { type: GraphQLFloat },
-    createdAt: { type: GraphQLString },
-  }),
-});
-
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    users: {
-      type: new GraphQLList(UserType),
-      resolve() {
-        return User.find({});
-      },
-    },
+    users: UsersField,
     user: {
       type: UserType,
       args: {
