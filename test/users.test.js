@@ -3,7 +3,7 @@ const User = require('../models/user');
 const { UsersField } = require('../schema/users');
 
 describe('users query', () => {
-  it('returns shit', () => {
+  it('returns appropriate user data', () => {
     const schema = new GraphQLSchema({
       query: new GraphQLObjectType({
         name: 'Query',
