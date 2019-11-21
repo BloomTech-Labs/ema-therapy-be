@@ -49,6 +49,7 @@ GET Users
       sleep
       createdAt
       userId
+      weather
     }
   }
 }
@@ -73,6 +74,7 @@ GET User By Sub
       sleep
       createdAt
       userId
+      weather
     }
   }
 }
@@ -90,6 +92,7 @@ mutation {
     anxietyLevel: 5
     sleep: 7.5
     userId: "5dcc9396d36d5ecc1234a218"
+    weather: "Rainy 24°"
   ) {
     id
     mood
@@ -98,6 +101,7 @@ mutation {
     sleep
     createdAt
     userId
+    weather
   }
 }
 ```
@@ -113,6 +117,7 @@ mutation {
     anxietyLevel
     sleep
     createdAt
+    weather
   }
 }
 ```
@@ -168,6 +173,7 @@ mutation {
   sleep: DOUBLE/FLOAT
   createdAt: TIMESTAMP
   userId: STRING
+  weather: STRING
 }
 ```
 
