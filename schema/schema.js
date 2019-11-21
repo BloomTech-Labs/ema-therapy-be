@@ -72,19 +72,21 @@ const Mutation = new GraphQLObjectType({
     addMood: {
       type: MoodType,
       args: {
-        mood: { type: new GraphQLNonNull(GraphQLInt) },
-        text: { type: GraphQLString },
-        anxietyLevel: { type: GraphQLInt },
-        sleep: { type: GraphQLFloat },
         userId: { type: new GraphQLNonNull(GraphQLID) },
+        mood: { type: new GraphQLNonNull(GraphQLInt) },
+        sleep: { type: GraphQLFloat },
+        anxietyLevel: { type: GraphQLInt },
+        text: { type: GraphQLString },
+        weather: { type: GraphQLString },
       },
       resolve(_, args) {
         let mood = new Mood({
-          mood: args.mood,
-          text: args.text,
-          anxietyLevel: args.anxietyLevel,
-          sleep: args.sleep,
           userId: args.userId,
+          mood: args.mood,
+          sleep: args.sleep,
+          anxietyLevel: args.anxietyLevel,
+          text: args.text,
+          weather: args.weather,
         });
         return mood.save();
       },
@@ -107,18 +109,20 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLID) },
         mood: { type: new GraphQLNonNull(GraphQLInt) },
-        text: { type: GraphQLString },
         sleep: { type: GraphQLFloat },
-        anxietyLevel: { type: new GraphQLNonNull(GraphQLInt) },
+        anxietyLevel: { type: GraphQLInt },
+        text: { type: GraphQLString },
+        weather: { type: GraphQLString },
       },
       async resolve(_, args) {
         await Mood.findByIdAndUpdate(
           args.id,
           {
             mood: args.mood,
-            text: args.text,
             sleep: args.sleep,
             anxietyLevel: args.anxietyLevel,
+            text: args.text,
+            weather: args.weather,
           },
           (error) => {
             if (error) {
