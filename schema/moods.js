@@ -21,12 +21,14 @@ const MoodType = new GraphQLObjectType({
     anxietyLevel: { type: GraphQLInt },
     sleep: { type: GraphQLFloat },
     createdAt: { type: GraphQLString },
+    weather: { type: GraphQLString },
   }),
 });
 
 const MoodsField = {
   type: new GraphQLList(MoodType),
-  resolver(parent, args) {
+  resolve(parent, args) {
+    console.log('DJFISOPAFHDIOAFHDUIFOASHFI');
     return Mood.find({ userId: parent.id });
   },
 };
