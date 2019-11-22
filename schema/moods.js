@@ -28,7 +28,6 @@ const MoodType = new GraphQLObjectType({
 const MoodsField = {
   type: new GraphQLList(MoodType),
   resolve(parent, args) {
-    console.log('DJFISOPAFHDIOAFHDUIFOASHFI');
     return Mood.find({ userId: parent.id });
   },
 };
