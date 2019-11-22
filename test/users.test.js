@@ -1,7 +1,12 @@
 const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
 const User = require('../models/user');
-const { UsersField, UserField } = require('../schema/users');
+const { UsersField, UserField, addUserField } = require('../schema/users');
 const { when } = require('jest-when');
+
+afterEach(() => {
+  console.log('clearing mocks');
+  jest.clearAllMocks();
+});
 
 describe('multiple users query', () => {
   it('returns appropriate array of users with user data', () => {
@@ -54,7 +59,7 @@ describe('multiple users query', () => {
 });
 
 describe('single user query', () => {
-  it('returns appropriate user when count is 1 and sub is provided', () => {
+  it('returns appropriate user when sub is provided and user exists', () => {
     const schema = new GraphQLSchema({
       query: new GraphQLObjectType({
         name: 'Query',
@@ -84,21 +89,28 @@ describe('single user query', () => {
       }
     }`;
 
-    jest.spyOn(User, 'count').mockReturnValue(Promise.resolve(1));
-    const userFindOneSpy = jest.spyOn(User, 'findOne');
-
-    when(userFindOneSpy)
-      .calledWith({ sub: mockUser1.sub })
-      .mockReturnValue(mockUser1);
+    const userFindOneSpy = jest
+      .spyOn(User, 'findOne')
+      .mockImplementation((searchParams) => {
+        return {
+          exec: () => {
+            if (searchParams.sub === mockUser1.sub) {
+              return mockUser1;
+            } else {
+              return 'Wrong param to User.findOne!';
+            }
+          },
+        };
+      });
 
     return graphql(schema, query, {}, {}).then((result) => {
-      // console.log(userFindOneSpy.mock.calls);
+      console.log(userFindOneSpy.mock.calls);
       expect(result).not.toBe(null);
       expect(result.data).toEqual({ user: mockUser1 });
     });
   });
 
-  it('returns appropriate user when count is 0 and sub is provided', () => {
+  it('creates and returns appropriate user when there is no existing user', () => {
     const schema = new GraphQLSchema({
       query: new GraphQLObjectType({
         name: 'Query',
@@ -109,36 +121,88 @@ describe('single user query', () => {
     });
 
     const mockUser1 = {
-      id: '1234567',
-      email: 'intelligentReference@help.com',
-      sub: 'justAfakeSub',
-      firstName: 'argh',
-      lastName: 'testsAreFun',
-      createdAt: `${Date.now()}`,
+      email: 'e@mail.com',
+      sub: 'fakeSubID',
+      firstName: 'Jonathan',
+      lastName: 'Taylor',
     };
 
     const query = `{
-      user(sub: "${mockUser1.sub}") {
-        id
+      user(sub: "${mockUser1.sub}", email: "${mockUser1.email}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}") {
         email
         sub
         firstName
         lastName
-        createdAt
       }
     }`;
 
-    jest.spyOn(User, 'count').mockReturnValue(Promise.resolve(0));
-    const userSaveSpy = jest.spyOn(User, 'save');
+    const userFindOneSpy = jest
+      .spyOn(User, 'findOne')
+      .mockImplementation((searchParams) => {
+        return {
+          exec: () => {
+            // Return null user upon findOne execution
+            return null;
+          },
+        };
+      });
 
-    when(userSaveSpy)
-      .calledWith()
-      .mockReturnValue();
+    const userCreateSpy = jest
+      .spyOn(User, 'create')
+      .mockImplementation((createParams) => {
+        return {
+          exec: () => {
+            return createParams;
+          },
+        };
+      });
 
     return graphql(schema, query, {}, {}).then((result) => {
-      // console.log(userFindOneSpy.mock.calls);
+      console.log(userCreateSpy.mock.calls);
       expect(result).not.toBe(null);
       expect(result.data).toEqual({ user: mockUser1 });
     });
   });
 });
+
+// describe('add user mutation', () => {
+//   it('adds user and returns appropriate user information', () => {
+//     const schema = new GraphQLSchema({
+//       query: new GraphQLObjectType({
+//         name: 'Mutation',
+//         fields: {
+//           addUser: addUserField,
+//         },
+//       }),
+//     });
+//     const mockUser1 = {
+//       id: '8675309',
+//       email: 'test@help.com',
+//       sub: 'fakeSub',
+//       firstName: 'testy',
+//       lastName: 'mctestface',
+//       createdAt: `${Date.now()}`,
+//     };
+
+//     const query = `{
+//       users (email: "${mockUser1.email}", sub: "${mockUser1.sub}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}") {
+//         email
+//         sub
+//         firstName
+//         lastName
+//       }
+//     }`;
+
+//     jest
+//       .spyOn(User, 'save')
+//       .mockReturnValue(Promise.resolve(mockUser1))
+//     ;
+
+//     return graphql(schema, query, {}, {}).then((result) => {
+//       expect(result).not.toBe(null);
+//       expect(result.data).toEqual({
+//         users: mockUser1,
+//       });
+//     });
+//   });
+// });

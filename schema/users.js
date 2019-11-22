@@ -26,6 +26,7 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
+// field for multiple users
 const UsersField = {
   type: new GraphQLList(UserType),
   resolve() {
@@ -33,6 +34,7 @@ const UsersField = {
   },
 };
 
+// field for single user
 const UserField = {
   type: UserType,
   args: {
@@ -42,21 +44,40 @@ const UserField = {
     lastName: { type: GraphQLString },
   },
   resolve: async (_, args) => {
-    // check if user exists
-    await User.count({ sub: args.sub }, (err, count) => {
-      if (err) console.log(err);
-      // add user if they do not exist
-      if (count === 0) {
-        let user = new User({
-          email: args.email,
-          sub: args.sub,
-          firstName: args.firstName,
-          lastName: args.lastName,
-        });
-        user.save();
-      }
+    const user = await User.findOne({ sub: args.sub }).exec();
+    // if user doen't exist
+    if (!user) {
+      // await user creation, then return user
+      const savedUser = await User.create({
+        email: args.email,
+        sub: args.sub,
+        firstName: args.firstName,
+        lastName: args.lastName,
+      }).exec();
+      return savedUser;
+    } else {
+      return user;
+    }
+  },
+};
+
+// field to add user
+const addUserField = {
+  type: UserType,
+  args: {
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    sub: { type: new GraphQLNonNull(GraphQLString) },
+    firstName: { type: GraphQLString },
+    lastName: { type: GraphQLString },
+  },
+  resolve(_, args) {
+    let user = new User({
+      email: args.email,
+      sub: args.sub,
+      firstName: args.firstName,
+      lastName: args.lastName,
     });
-    return User.findOne({ sub: args.sub });
+    return user.save();
   },
 };
 
@@ -64,4 +85,5 @@ module.exports = {
   UsersField,
   UserType,
   UserField,
+  addUserField,
 };
