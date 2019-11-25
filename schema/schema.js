@@ -73,6 +73,28 @@ const Mutation = new GraphQLObjectType({
         return user.save();
       },
     },
+    updateIsSharingLocation: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        isSharingLocation: { type: new GraphQLNonNull(GraphQLBoolean) },
+      },
+      async resolve(_, args) {
+        console.log('IDIDIDIDIDIDIDIDIDI', args.id);
+        await User.findByIdAndUpdate(
+          args.id,
+          {
+            isSharingLocation: args.isSharingLocation,
+          },
+          (error) => {
+            if (error) {
+              return next(error);
+            }
+          },
+        );
+        return User.findById(args.id);
+      },
+    },
     addMood: {
       type: MoodType,
       args: {
