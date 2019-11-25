@@ -5,12 +5,9 @@ const { MoodsField } = require('./moods');
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLSchema,
   GraphQLList,
-  GraphQLNonNull,
-  GraphQLInt,
   GraphQLID,
-  GraphQLFloat,
+  GraphQLBoolean,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -22,6 +19,7 @@ const UserType = new GraphQLObjectType({
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
     createdAt: { type: GraphQLString },
+    isSharingLocation: { type: GraphQLBoolean },
     moods: MoodsField,
   }),
 });
