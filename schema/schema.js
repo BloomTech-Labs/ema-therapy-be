@@ -8,11 +8,11 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema,
-  GraphQLList,
   GraphQLNonNull,
   GraphQLInt,
   GraphQLID,
   GraphQLFloat,
+  GraphQLBoolean,
 } = graphql;
 
 const RootQuery = new GraphQLObjectType({
@@ -24,6 +24,7 @@ const RootQuery = new GraphQLObjectType({
       args: {
         sub: { type: GraphQLID },
         email: { type: GraphQLString },
+        isSharingLocation: { type: GraphQLBoolean },
         firstName: { type: GraphQLString },
         lastName: { type: GraphQLString },
       },
@@ -36,6 +37,7 @@ const RootQuery = new GraphQLObjectType({
             let user = new User({
               email: args.email,
               sub: args.sub,
+              isSharingLocation: args.isSharingLocation,
               firstName: args.firstName,
               lastName: args.lastName,
             });
@@ -56,6 +58,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         email: { type: new GraphQLNonNull(GraphQLString) },
         sub: { type: new GraphQLNonNull(GraphQLString) },
+        isSharingLocation: { type: GraphQLBoolean },
         firstName: { type: GraphQLString },
         lastName: { type: GraphQLString },
       },
@@ -63,6 +66,7 @@ const Mutation = new GraphQLObjectType({
         let user = new User({
           email: args.email,
           sub: args.sub,
+          isSharingLocation: args.isSharingLocation,
           firstName: args.firstName,
           lastName: args.lastName,
         });
