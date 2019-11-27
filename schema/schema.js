@@ -80,7 +80,6 @@ const Mutation = new GraphQLObjectType({
         isSharingLocation: { type: new GraphQLNonNull(GraphQLBoolean) },
       },
       async resolve(_, args) {
-        console.log('IDIDIDIDIDIDIDIDIDI', args.id);
         await User.findByIdAndUpdate(
           args.id,
           {
