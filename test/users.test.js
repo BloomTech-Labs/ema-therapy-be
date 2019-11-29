@@ -6,10 +6,8 @@ const {
 } = require('graphql');
 const User = require('../models/user');
 const { UsersField, UserField, addUserField } = require('../schema/users');
-const { when } = require('jest-when');
 
 afterEach(() => {
-  console.log('clearing mocks');
   jest.clearAllMocks();
 });
 

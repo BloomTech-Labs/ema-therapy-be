@@ -64,7 +64,7 @@ const removeMoodField = {
   resolve(_, args) {
     const remMood = Mood.findByIdAndRemove(args.id).exec();
     if (!remMood) {
-      throw new Error('Error');
+      throw new Error('Could not find mood for given id');
     }
     return remMood;
   },
@@ -81,22 +81,19 @@ const editMoodField = {
     weather: { type: GraphQLString },
   },
   async resolve(_, args) {
-    await Mood.findByIdAndUpdate(
-      args.id,
-      {
-        mood: args.mood,
-        sleep: args.sleep,
-        anxietyLevel: args.anxietyLevel,
-        text: args.text,
-        weather: args.weather,
-      },
-      (error) => {
-        if (error) {
-          return next(error);
-        }
-      },
-    );
-    return Mood.findById(args.id);
+    // Only update the fields which are not undefined
+    const fieldsToUpdate = {};
+    const fieldNames = ['mood', 'sleep', 'anxietyLevel', 'text', 'weather'];
+    for (let i = 0; i < fieldNames.length; i++) {
+      let fieldName = fieldNames[i];
+      if (typeof args[fieldName] !== 'undefined') {
+        fieldsToUpdate[fieldName] = args[fieldName];
+      }
+    }
+    const updatedMood = await Mood.findByIdAndUpdate(args.id, fieldsToUpdate, {
+      new: true,
+    }).exec();
+    return updatedMood;
   },
 };
 
