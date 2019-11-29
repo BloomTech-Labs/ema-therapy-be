@@ -25,7 +25,7 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
-// field for multiple users
+// field for multiple users query
 const UsersField = {
   type: new GraphQLList(UserType),
   resolve() {
@@ -33,7 +33,7 @@ const UsersField = {
   },
 };
 
-// field for single user
+// field for single user query
 const UserField = {
   type: UserType,
   args: {
@@ -62,7 +62,7 @@ const UserField = {
   },
 };
 
-// field to add user
+// field to add user mutation
 const addUserField = {
   type: UserType,
   args: {
@@ -72,19 +72,20 @@ const addUserField = {
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
   },
-  resolve(_, args) {
-    let user = new User({
+  resolve: async (_, args) => {
+    const createdUser = await User.create({
       email: args.email,
       sub: args.sub,
       isSharingLocation: args.isSharingLocation,
       firstName: args.firstName,
       lastName: args.lastName,
     });
-    return user.save();
+    return createdUser;
   },
 };
 
-isSharingLocationField = {
+// field to change Sharing Location mutation
+const isSharingLocationField = {
   type: UserType,
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) },

@@ -1,4 +1,9 @@
-const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
+const {
+  graphql,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} = require('graphql');
 const User = require('../models/user');
 const { UsersField, UserField, addUserField } = require('../schema/users');
 const { when } = require('jest-when');
@@ -104,7 +109,6 @@ describe('single user query', () => {
       });
 
     return graphql(schema, query, {}, {}).then((result) => {
-      console.log(userFindOneSpy.mock.calls);
       expect(result).not.toBe(null);
       expect(result.data).toEqual({ user: mockUser1 });
     });
@@ -154,51 +158,61 @@ describe('single user query', () => {
       });
 
     return graphql(schema, query, {}, {}).then((result) => {
-      console.log(userCreateSpy.mock.calls);
       expect(result).not.toBe(null);
       expect(result.data).toEqual({ user: mockUser1 });
     });
   });
 });
 
-// describe('add user mutation', () => {
-//   it('adds user and returns appropriate user information', () => {
-//     const schema = new GraphQLSchema({
-//       query: new GraphQLObjectType({
-//         name: 'Mutation',
-//         fields: {
-//           addUser: addUserField,
-//         },
-//       }),
-//     });
-//     const mockUser1 = {
-//       id: '8675309',
-//       email: 'test@help.com',
-//       sub: 'fakeSub',
-//       firstName: 'testy',
-//       lastName: 'mctestface',
-//       createdAt: `${Date.now()}`,
-//     };
+describe('add user mutation', () => {
+  it('adds user and returns appropriate user information', () => {
+    const schema = new GraphQLSchema({
+      // The entire query block is just to appease graphql validation
+      query: new GraphQLObjectType({
+        name: 'RootQueryType',
+        fields: {
+          addUser: addUserField,
+        },
+      }),
+    });
+    const mockUser1 = {
+      id: 'someID',
+      email: 'test@help.com',
+      isSharingLocation: true,
+      firstName: 'testy',
+      lastName: 'mctestface',
+      sub: 'fakeSub',
+      createdAt: `${Date.now()}`,
+    };
 
-//     const query = `{
-//       users (email: "${mockUser1.email}", sub: "${mockUser1.sub}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}") {
-//         email
-//         sub
-//         firstName
-//         lastName
-//       }
-//     }`;
+    const query = `
+      {
+        addUser(email: "${mockUser1.email}", sub: "${mockUser1.sub}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}"){
+          id
+          firstName
+          lastName
+          isSharingLocation
+          email
+          createdAt
+          sub
+        }
+      }
+    `;
 
-//     jest
-//       .spyOn(User, 'save')
-//       .mockReturnValue(Promise.resolve(mockUser1))
-//     ;
+    const userCreateSpy = jest.spyOn(User, 'create').mockImplementation(() => {
+      return mockUser1;
+    });
 
-//     return graphql(schema, query, {}, {}).then((result) => {
-//       expect(result).not.toBe(null);
-//       expect(result.data).toEqual({
-//         users: mockUser1,
-//       });
-//     });
-//   });
-// });
+    return graphql(schema, query, {}, {}).then(
+      (result) => {
+        expect(result).not.toBe(null);
+        expect(result.data).toEqual({
+          addUser: mockUser1,
+        });
+      },
+      (result) => {
+        console.log(result);
+      },
+    );
+  });
+});

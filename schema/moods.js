@@ -43,8 +43,8 @@ const addMoodField = {
     text: { type: GraphQLString },
     weather: { type: GraphQLString },
   },
-  resolve(_, args) {
-    let mood = new Mood({
+  resolve: async (_, args) => {
+    const createdMood = await Mood.create({
       userId: args.userId,
       mood: args.mood,
       sleep: args.sleep,
@@ -52,7 +52,7 @@ const addMoodField = {
       text: args.text,
       weather: args.weather,
     });
-    return mood.save();
+    return createdMood;
   },
 };
 

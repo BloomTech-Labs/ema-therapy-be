@@ -6,7 +6,6 @@ const Mood = require('../models/mood');
 
 // schema field and type imports
 const {
-  UserType,
   UsersField,
   UserField,
   addUserField,
@@ -19,16 +18,7 @@ const {
   editMoodField,
 } = require('./moods');
 
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLSchema,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLID,
-  GraphQLFloat,
-  GraphQLBoolean,
-} = graphql;
+const { GraphQLObjectType, GraphQLSchema } = graphql;
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
