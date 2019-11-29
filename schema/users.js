@@ -5,12 +5,10 @@ const { MoodsField } = require('./moods');
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLSchema,
   GraphQLList,
-  GraphQLNonNull,
-  GraphQLInt,
   GraphQLID,
-  GraphQLFloat,
+  GraphQLBoolean,
+  GraphQLNonNull,
 } = graphql;
 
 const UserType = new GraphQLObjectType({
@@ -22,6 +20,7 @@ const UserType = new GraphQLObjectType({
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
     createdAt: { type: GraphQLString },
+    isSharingLocation: { type: GraphQLBoolean },
     moods: MoodsField,
   }),
 });
@@ -40,6 +39,7 @@ const UserField = {
   args: {
     sub: { type: GraphQLID },
     email: { type: GraphQLString },
+    isSharingLocation: { type: GraphQLBoolean },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
   },
@@ -51,9 +51,10 @@ const UserField = {
       const savedUser = await User.create({
         email: args.email,
         sub: args.sub,
+        isSharingLocation: args.isSharingLocation,
         firstName: args.firstName,
         lastName: args.lastName,
-      }).exec();
+      });
       return savedUser;
     } else {
       return user;
@@ -67,6 +68,7 @@ const addUserField = {
   args: {
     email: { type: new GraphQLNonNull(GraphQLString) },
     sub: { type: new GraphQLNonNull(GraphQLString) },
+    isSharingLocation: { type: GraphQLBoolean },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
   },
@@ -74,6 +76,7 @@ const addUserField = {
     let user = new User({
       email: args.email,
       sub: args.sub,
+      isSharingLocation: args.isSharingLocation,
       firstName: args.firstName,
       lastName: args.lastName,
     });

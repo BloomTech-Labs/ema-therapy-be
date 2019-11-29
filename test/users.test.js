@@ -150,11 +150,7 @@ describe('single user query', () => {
     const userCreateSpy = jest
       .spyOn(User, 'create')
       .mockImplementation((createParams) => {
-        return {
-          exec: () => {
-            return createParams;
-          },
-        };
+        return createParams;
       });
 
     return graphql(schema, query, {}, {}).then((result) => {
