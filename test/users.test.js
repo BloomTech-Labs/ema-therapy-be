@@ -1,9 +1,4 @@
-const {
-  graphql,
-  GraphQLObjectType,
-  GraphQLSchema,
-  GraphQLString,
-} = require('graphql');
+const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
 const User = require('../models/user');
 const { UsersField, UserField, addUserField } = require('../schema/users');
 
@@ -201,16 +196,11 @@ describe('add user mutation', () => {
       return mockUser1;
     });
 
-    return graphql(schema, query, {}, {}).then(
-      (result) => {
-        expect(result).not.toBe(null);
-        expect(result.data).toEqual({
-          addUser: mockUser1,
-        });
-      },
-      (result) => {
-        console.log(result);
-      },
-    );
+    return graphql(schema, query, {}, {}).then((result) => {
+      expect(result).not.toBe(null);
+      expect(result.data).toEqual({
+        addUser: mockUser1,
+      });
+    });
   });
 });

@@ -4,7 +4,6 @@ const Mood = require('../models/mood');
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
   GraphQLInt,

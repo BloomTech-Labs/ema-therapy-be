@@ -1,10 +1,7 @@
-const {
-  graphql,
-  GraphQLObjectType,
-  GraphQLSchema,
-  GraphQLString,
-} = require('graphql');
+const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
+
 const Mood = require('../models/mood');
+
 const {
   addMoodField,
   removeMoodField,
@@ -22,6 +19,7 @@ describe('addMood mutation', () => {
         },
       }),
     });
+
     const mockMood1 = {
       mood: 3,
       sleep: 8.7,
@@ -72,6 +70,7 @@ describe('removeMood mutation', () => {
         },
       }),
     });
+
     const mockMood1 = {
       id: '13',
       mood: 3,

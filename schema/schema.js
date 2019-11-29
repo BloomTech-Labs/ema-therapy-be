@@ -1,22 +1,13 @@
 const graphql = require('graphql');
 
-// model imports
-const User = require('../models/user');
-const Mood = require('../models/mood');
-
-// schema field and type imports
 const {
   UsersField,
   UserField,
   addUserField,
   isSharingLocationField,
 } = require('./users');
-const {
-  MoodType,
-  addMoodField,
-  removeMoodField,
-  editMoodField,
-} = require('./moods');
+
+const { addMoodField, removeMoodField, editMoodField } = require('./moods');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
