@@ -84,9 +84,32 @@ const addUserField = {
   },
 };
 
+isSharingLocationField = {
+  type: UserType,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    isSharingLocation: { type: new GraphQLNonNull(GraphQLBoolean) },
+  },
+  async resolve(_, args) {
+    await User.findByIdAndUpdate(
+      args.id,
+      {
+        isSharingLocation: args.isSharingLocation,
+      },
+      (error) => {
+        if (error) {
+          return next(error);
+        }
+      },
+    );
+    return User.findById(args.id);
+  },
+};
+
 module.exports = {
   UsersField,
   UserType,
   UserField,
   addUserField,
+  isSharingLocationField,
 };
