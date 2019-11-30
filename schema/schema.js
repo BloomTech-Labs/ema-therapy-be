@@ -5,7 +5,9 @@ const { UserType, UsersField } = require('./users');
 const { MoodType } = require('./moods');
 
 const {
+  GraphQLList,
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString,
   GraphQLSchema,
   GraphQLNonNull,
@@ -78,15 +80,20 @@ const Mutation = new GraphQLObjectType({
       args: {
         userId: { type: new GraphQLNonNull(GraphQLID) },
         mood: { type: new GraphQLNonNull(GraphQLInt) },
+        // this might be set up to take a new obj but not an array of objs might need to
+        // imbed diff data types with same logic here, also review this whole gql thing
+        activities: { type: GraphQLString },
         sleep: { type: GraphQLFloat },
         anxietyLevel: { type: GraphQLInt },
         text: { type: GraphQLString },
         weather: { type: GraphQLString },
       },
       resolve(_, args) {
+        console.log('args in be', args);
         let mood = new Mood({
           userId: args.userId,
           mood: args.mood,
+          activities: args.activities,
           sleep: args.sleep,
           anxietyLevel: args.anxietyLevel,
           text: args.text,

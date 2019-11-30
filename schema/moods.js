@@ -17,6 +17,7 @@ const MoodType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     mood: { type: GraphQLInt },
+    activities: { type: GraphQLString },
     text: { type: GraphQLString },
     anxietyLevel: { type: GraphQLInt },
     sleep: { type: GraphQLFloat },

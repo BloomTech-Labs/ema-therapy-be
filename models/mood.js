@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const moodSchema = new Schema({
   mood: Number,
+  activities: String,
   text: String,
   anxietyLevel: Number,
   sleep: Number,
