@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editMood mutation edits correct fields and returns edited data 1`] = `
+Object {
+  "editMood": Object {
+    "anxietyLevel": 3,
+    "id": null,
+    "mood": 3,
+    "sleep": 8.7,
+    "text": "Test text field.",
+    "weather": "Test weather field.",
+  },
+}
+`;
+
+exports[`removeMood mutation throws correct error when mood to remove not found 1`] = `
+Object {
+  "data": Object {
+    "removeMood": null,
+  },
+  "errors": Array [
+    [GraphQLError: Could not find mood for given id],
+  ],
+}
+`;
