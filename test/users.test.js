@@ -1,6 +1,11 @@
 const { graphql, GraphQLObjectType, GraphQLSchema } = require('graphql');
 const User = require('../models/user');
-const { UsersField, UserField, addUserField } = require('../schema/users');
+const {
+  UsersField,
+  UserField,
+  addUserField,
+  isSharingLocationField,
+} = require('../schema/users');
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -87,19 +92,17 @@ describe('single user query', () => {
       }
     }`;
 
-    const userFindOneSpy = jest
-      .spyOn(User, 'findOne')
-      .mockImplementation((searchParams) => {
-        return {
-          exec: () => {
-            if (searchParams.sub === mockUser1.sub) {
-              return mockUser1;
-            } else {
-              return 'Wrong param to User.findOne!';
-            }
-          },
-        };
-      });
+    jest.spyOn(User, 'findOne').mockImplementation((searchParams) => {
+      return {
+        exec: () => {
+          if (searchParams.sub === mockUser1.sub) {
+            return mockUser1;
+          } else {
+            return 'Wrong param to User.findOne!';
+          }
+        },
+      };
+    });
 
     return graphql(schema, query, {}, {}).then((result) => {
       expect(result).not.toBe(null);
@@ -133,22 +136,18 @@ describe('single user query', () => {
       }
     }`;
 
-    const userFindOneSpy = jest
-      .spyOn(User, 'findOne')
-      .mockImplementation((searchParams) => {
-        return {
-          exec: () => {
-            // Return null user upon findOne execution
-            return null;
-          },
-        };
-      });
+    jest.spyOn(User, 'findOne').mockImplementation((searchParams) => {
+      return {
+        exec: () => {
+          // Return null user upon findOne execution
+          return null;
+        },
+      };
+    });
 
-    const userCreateSpy = jest
-      .spyOn(User, 'create')
-      .mockImplementation((createParams) => {
-        return createParams;
-      });
+    jest.spyOn(User, 'create').mockImplementation((createParams) => {
+      return createParams;
+    });
 
     return graphql(schema, query, {}, {}).then((result) => {
       expect(result).not.toBe(null);
@@ -192,7 +191,7 @@ describe('add user mutation', () => {
       }
     `;
 
-    const userCreateSpy = jest.spyOn(User, 'create').mockImplementation(() => {
+    jest.spyOn(User, 'create').mockImplementation(() => {
       return mockUser1;
     });
 
@@ -200,6 +199,62 @@ describe('add user mutation', () => {
       expect(result).not.toBe(null);
       expect(result.data).toEqual({
         addUser: mockUser1,
+      });
+    });
+  });
+});
+
+describe('updateIsSharingLocation mutation', () => {
+  it('updates isSharing field and returns the appropriate user', () => {
+    const schema = new GraphQLSchema({
+      // The entire query block is just to appease graphql validation
+      query: new GraphQLObjectType({
+        name: 'RootQueryType',
+        fields: {
+          updateIsSharingLocation: isSharingLocationField,
+        },
+      }),
+    });
+    const mockUser1 = {
+      id: 'someID',
+      email: 'test@help.com',
+      isSharingLocation: true,
+      firstName: 'testy',
+      lastName: 'mctestface',
+      sub: 'fakeSub',
+      createdAt: `${Date.now()}`,
+    };
+
+    const query = `
+      {
+        updateIsSharingLocation(id: "${mockUser1.id}", isSharingLocation: ${mockUser1.isSharingLocation}){
+          id
+          isSharingLocation
+        }
+      }
+    `;
+
+    const userUpdateSpy = jest
+      .spyOn(User, 'findByIdAndUpdate')
+      .mockImplementation(() => {
+        return {
+          exec: () => {
+            return mockUser1;
+          },
+        };
+      });
+
+    return graphql(schema, query, {}, {}).then((result) => {
+      expect(result).not.toBe(null);
+      expect(result.data).toEqual({
+        updateIsSharingLocation: {
+          id: mockUser1.id,
+          isSharingLocation: mockUser1.isSharingLocation,
+        },
+      });
+      expect(userUpdateSpy.mock.calls[0][0]).toEqual(mockUser1.id);
+      expect(userUpdateSpy.mock.calls[0][1]).toEqual({
+        isSharingLocation: mockUser1.isSharingLocation,
       });
     });
   });
