@@ -22,6 +22,7 @@ app.use(
     extended: false,
   }),
 );
+app.use(bodyParser.json());
 
 // Passport initialize
 app.use(passport.initialize());
@@ -42,10 +43,11 @@ require('./config/passport-config.js')(passport);
 // });
 
 // routes
-app.use('/auth');
+app.use('/auth', authRoutes);
 app.use(
   '/backend',
   // checkJwt,
+  passport.authenticate('jwt', { session: false }),
   graphqlHTTP({
     schema,
     graphiql: true,

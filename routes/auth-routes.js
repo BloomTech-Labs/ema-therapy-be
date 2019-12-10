@@ -2,14 +2,36 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const keys = require('../../config/keys');
+const keys = require('../config/keys');
 
 // Load input validation
-const validateRegisterInput = require('../../validation/register');
-const validateLoginInput = require('../../validation/login');
+const validateRegisterInput = require('../validation/register-validation');
+const validateLoginInput = require('../validation/login-validation');
 
 // Load User model
-const User = require('../../models/user-model');
+const User = require('../models/user');
+
+// function to help with login, used in both endpoints
+const sendToken = (user, res) => {
+  const payload = {
+    id: user.id,
+  };
+
+  // Sign token
+  jwt.sign(
+    payload,
+    keys.secretOrKey,
+    {
+      expiresIn: 31556926, // 1 year in seconds
+    },
+    (err, token) => {
+      res.json({
+        success: true,
+        token: 'Bearer ' + token,
+      });
+    },
+  );
+};
 
 // @route POST api/users/register
 // @desc Register user
@@ -28,19 +50,21 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ email: 'Email already exists' });
     } else {
       const newUser = new User({
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
+        isSharingLocation: req.body.isSharingLocation,
       });
 
       // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.genSalt(12, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
           newUser
             .save()
-            .then((user) => res.json(user))
+            .then((user) => sendToken(user, res))
             .catch((err) => console.log(err));
         });
       });
@@ -74,25 +98,26 @@ router.post('/login', (req, res) => {
       if (isMatch) {
         // User matched
         // Create JWT Payload
-        const payload = {
-          id: user.id,
-          name: user.name,
-        };
+        sendToken(user, res);
+        // const payload = {
+        //   id: user.id,
+        //   name: user.name,
+        // };
 
-        // Sign token
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          {
-            expiresIn: 31556926, // 1 year in seconds
-          },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: 'Bearer ' + token,
-            });
-          },
-        );
+        // // Sign token
+        // jwt.sign(
+        //   payload,
+        //   keys.secretOrKey,
+        //   {
+        //     expiresIn: 31556926, // 1 year in seconds
+        //   },
+        //   (err, token) => {
+        //     res.json({
+        //       success: true,
+        //       token: 'Bearer ' + token,
+        //     });
+        //   },
+        // );
       } else {
         return res
           .status(400)
