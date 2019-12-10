@@ -15,6 +15,12 @@ const userSchema = new Schema({
   },
   isSharingLocation: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  google: {
+    username: String,
+    googleId: String,
+    id: String,
+    token: String,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);
