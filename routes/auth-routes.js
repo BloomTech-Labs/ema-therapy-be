@@ -22,9 +22,10 @@ const sendToken = (user, res) => {
     payload,
     keys.secretOrKey,
     {
-      expiresIn: 31556926, // 1 year in seconds
+      expiresIn: 60 * 60 * 24 * 7, // 1 week in seconds
     },
     (err, token) => {
+      if (err) throw err;
       res.json({
         success: true,
         token: 'Bearer ' + token,
