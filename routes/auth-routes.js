@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const keys = require('../config/keys');
+// const keys = require('../config/keys');
 
 // Load input validation
 const validateRegisterInput = require('../validation/register-validation');
@@ -20,7 +20,8 @@ const sendToken = (user, res) => {
   // Sign token
   jwt.sign(
     payload,
-    keys.secretOrKey,
+    // keys.secretOrKey,
+    process.env.SECRET_OR_KEY,
     {
       expiresIn: 60 * 60 * 24 * 7, // 1 week in seconds
     },
