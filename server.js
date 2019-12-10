@@ -10,6 +10,7 @@ const schema = require('./schema/schema');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const authRoutes = require('./routes/auth-routes');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -42,11 +43,24 @@ require('./config/passport-config.js')(passport);
 //   algorithms: ['RS256'],
 // });
 
+// Rate Limit
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+});
+
+const backendLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  max: 1000,
+  message: 'Too many attempts, please try again after an hour',
+});
+
 // routes
-app.use('/auth', authRoutes);
+app.use('/auth', authLimiter, authRoutes);
 app.use(
   '/backend',
   // checkJwt,
+  backendLimiter,
   passport.authenticate('jwt', { session: false }),
   graphqlHTTP({
     schema,
