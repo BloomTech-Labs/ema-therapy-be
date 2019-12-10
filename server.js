@@ -7,31 +7,45 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const schema = require('./schema/schema');
 const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./config/auth-config');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const authRoutes = require('./routes/auth-routes');
 
 const app = express();
 
-// Middlware
+// Middleware
 app.use(cors());
 app.use(helmet());
 app.use(morgan('combined'));
-
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
   }),
+);
 
-  // Validate the audience and the issuer.
-  audience: AUTH0_AUDIENCE,
-  issuer: `https://${AUTH0_DOMAIN}/`,
-  algorithms: ['RS256'],
-});
+// Passport initialize
+app.use(passport.initialize());
+require('./config/passport-config.js')(passport);
 
+// const checkJwt = jwt({
+//   secret: jwksRsa.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+//   }),
+
+//   // Validate the audience and the issuer.
+//   audience: AUTH0_AUDIENCE,
+//   issuer: `https://${AUTH0_DOMAIN}/`,
+//   algorithms: ['RS256'],
+// });
+
+// routes
+app.use('/auth');
 app.use(
   '/backend',
-  checkJwt,
+  // checkJwt,
   graphqlHTTP({
     schema,
     graphiql: true,
