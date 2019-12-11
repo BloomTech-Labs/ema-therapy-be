@@ -92,18 +92,21 @@ const isSharingLocationField = {
     isSharingLocation: { type: new GraphQLNonNull(GraphQLBoolean) },
   },
   async resolve(_, args) {
-    await User.findByIdAndUpdate(
-      args.id,
-      {
-        isSharingLocation: args.isSharingLocation,
-      },
-      (error) => {
-        if (error) {
-          return next(error);
-        }
-      },
-    );
-    return User.findById(args.id);
+    let updatedUser = null;
+    try {
+      updatedUser = await User.findByIdAndUpdate(
+        args.id,
+        {
+          isSharingLocation: args.isSharingLocation,
+        },
+        {
+          new: true,
+        },
+      ).exec();
+    } catch (err) {
+      console.log('Unable to update isSharingLocation:', err);
+    }
+    return updatedUser;
   },
 };
 
