@@ -1,12 +1,12 @@
 const JwtStrategy = require('passport-jwt').Strategy;
+const GoogleStrategy = require('passport-google-oauth20');
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const keys = require('../config/keys');
 const opts = {};
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = keys.secretOrKey;
+opts.secretOrKey = process.env.SECRET_OR_KEY;
 
 module.exports = (passport) => {
   passport.use(
@@ -27,8 +27,8 @@ module.exports = (passport) => {
       {
         // options for the google strategy
         callbackURL: '/auth/google/redirect',
-        clientID: keys.google.clientID,
-        clientSecret: keys.google.clientSecret,
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       },
       (accessToken, refreshToken, profile, done) => {
         // passport callback function

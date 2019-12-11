@@ -57,7 +57,7 @@ const backendLimiter = rateLimit({
 });
 
 // routes
-app.use('/auth', authLimiter, authRoutes, socialAuthRoutes);
+app.use('/auth', authLimiter, [authRoutes, socialAuthRoutes]);
 app.use(
   '/backend',
   // checkJwt,
