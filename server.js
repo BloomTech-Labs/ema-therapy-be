@@ -10,6 +10,7 @@ const schema = require('./schema/schema');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const authRoutes = require('./routes/auth-routes');
+const socialAuthRoutes = require('./routes/social-auth-routes');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
@@ -56,7 +57,7 @@ const backendLimiter = rateLimit({
 });
 
 // routes
-app.use('/auth', authLimiter, authRoutes);
+app.use('/auth', authLimiter, authRoutes, socialAuthRoutes);
 app.use(
   '/backend',
   // checkJwt,

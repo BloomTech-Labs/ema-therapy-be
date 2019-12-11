@@ -35,23 +35,22 @@ module.exports = (passport) => {
         // check if user already exists
         User.findOne({ google: { googleId: profile.id } }).then(
           (existingUser) => {
-            console.log('profile:', profile);
             if (existingUser) {
               //if they exist, get them
-              console.log('existing user found:', existingUser);
               done(null, existingUser);
             } else {
               // if not, create user in db
               try {
                 newUser = User.create({
-                  username: profile.displayName,
-                  googleId: profile.id,
-                  thumbnail: profile._json.picture,
+                  google: {
+                    username: profile.displayName,
+                    googleId: profile.id,
+                  },
                 }).then((newUser) => {
                   if (newUser) {
                     return done(null, newUser);
                   }
-                  return done(null, false);
+                  return done(new Error('User object not found'), false);
                 });
               } catch (err) {
                 console.log('Error creating user:', err);

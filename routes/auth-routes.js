@@ -12,9 +12,12 @@ const User = require('../models/user');
 
 // function to help with login, used in both endpoints
 const sendToken = (user, res) => {
-  const payload = {
-    id: user.id,
-  };
+  let payload = {};
+  if (user.google.googleId) {
+    payload.googleId = user.google.googleId;
+  } else {
+    payload.email = user.email;
+  }
 
   // Sign token
   jwt.sign(
@@ -34,7 +37,7 @@ const sendToken = (user, res) => {
 };
 
 // @route POST api/users/register
-// @desc Register user
+// @desc Register user and return JWT token
 // @access Public
 router.post('/register', (req, res) => {
   // Form validation
@@ -99,25 +102,6 @@ router.post('/login', (req, res) => {
         // User matched
         // Create JWT Payload
         sendToken(user, res);
-        // const payload = {
-        //   id: user.id,
-        //   name: user.name,
-        // };
-
-        // // Sign token
-        // jwt.sign(
-        //   payload,
-        //   keys.secretOrKey,
-        //   {
-        //     expiresIn: 31556926, // 1 year in seconds
-        //   },
-        //   (err, token) => {
-        //     res.json({
-        //       success: true,
-        //       token: 'Bearer ' + token,
-        //     });
-        //   },
-        // );
       } else {
         return res
           .status(400)
