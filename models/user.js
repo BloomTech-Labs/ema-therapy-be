@@ -18,8 +18,6 @@ const userSchema = new Schema({
   google: {
     username: String,
     googleId: String,
-    id: String,
-    token: String,
   },
 });
 
