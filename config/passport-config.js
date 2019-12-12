@@ -13,6 +13,7 @@ module.exports = (passport) => {
     new JwtStrategy(opts, (jwt_payload, done) => {
       User.findById(jwt_payload.id)
         .then((user) => {
+          console.log('stuff is here');
           if (user) {
             return done(null, user);
           }
@@ -42,6 +43,7 @@ module.exports = (passport) => {
               // if not, create user in db
               try {
                 newUser = User.create({
+                  email: profile.email,
                   google: {
                     username: profile.displayName,
                     googleId: profile.id,
