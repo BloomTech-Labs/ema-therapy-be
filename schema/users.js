@@ -16,7 +16,6 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     email: { type: GraphQLString },
-    sub: { type: GraphQLString },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
     createdAt: { type: GraphQLString },
@@ -37,20 +36,18 @@ const UsersField = {
 const UserField = {
   type: UserType,
   args: {
-    sub: { type: GraphQLID },
     email: { type: GraphQLString },
     isSharingLocation: { type: GraphQLBoolean },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
   },
   resolve: async (_, args) => {
-    const user = await User.findOne({ sub: args.sub }).exec();
+    const user = await User.findOne({ email: args.email }).exec();
     // if user doen't exist
     if (!user) {
       // await user creation, then return user
       const savedUser = await User.create({
         email: args.email,
-        sub: args.sub,
         isSharingLocation: args.isSharingLocation,
         firstName: args.firstName,
         lastName: args.lastName,
@@ -67,7 +64,6 @@ const addUserField = {
   type: UserType,
   args: {
     email: { type: new GraphQLNonNull(GraphQLString) },
-    sub: { type: new GraphQLNonNull(GraphQLString) },
     isSharingLocation: { type: GraphQLBoolean },
     firstName: { type: GraphQLString },
     lastName: { type: GraphQLString },
@@ -75,7 +71,6 @@ const addUserField = {
   resolve: async (_, args) => {
     const createdUser = await User.create({
       email: args.email,
-      sub: args.sub,
       isSharingLocation: args.isSharingLocation,
       firstName: args.firstName,
       lastName: args.lastName,
