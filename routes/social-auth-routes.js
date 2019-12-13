@@ -12,7 +12,8 @@ router.get(
 
 // callback route for google to redirect to
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  res.redirect('/dashboard');
+  console.log('google auth response', res);
+  res.redirect('http://localhost:3000/dashboard');
 });
 
 module.exports = router;
