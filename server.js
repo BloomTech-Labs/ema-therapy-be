@@ -3,10 +3,7 @@ const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-// const jwt = require('express-jwt');
-// const jwksRsa = require('jwks-rsa');
 const schema = require('./schema/schema');
-// const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./config/auth-config');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const authRoutes = require('./routes/auth-routes');
@@ -30,20 +27,6 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 require('./config/passport-config.js')(passport);
 
-// const checkJwt = jwt({
-//   secret: jwksRsa.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 5,
-//     jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
-//   }),
-
-//   // Validate the audience and the issuer.
-//   audience: AUTH0_AUDIENCE,
-//   issuer: `https://${AUTH0_DOMAIN}/`,
-//   algorithms: ['RS256'],
-// });
-
 // Rate Limit
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -60,7 +43,6 @@ const backendLimiter = rateLimit({
 app.use('/auth', authLimiter, [authRoutes, socialAuthRoutes]);
 app.use(
   '/backend',
-  // checkJwt,
   backendLimiter,
   passport.authenticate('jwt', { session: false }),
   graphqlHTTP({

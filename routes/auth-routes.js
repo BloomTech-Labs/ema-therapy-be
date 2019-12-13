@@ -12,12 +12,11 @@ const User = require('../models/user');
 
 // function to help with login, used in both endpoints
 const sendToken = (user, res) => {
-  let payload = {};
-  if (user.google.googleId) {
-    payload.googleId = user.google.googleId;
-  } else {
-    payload.email = user.email;
-  }
+  let payload = {
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  };
 
   // Sign token
   jwt.sign(
