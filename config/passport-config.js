@@ -32,35 +32,46 @@ module.exports = (passport) => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       },
       (accessToken, refreshToken, profile, done) => {
+        console.log('inside GoogleStrategy');
+        console.log('google profile', profile);
         // passport callback function
         // check if user already exists
-        User.findOne({ google: { googleId: profile.id } }).then(
-          (existingUser) => {
+        User.findOne({ google: { googleId: profile.id } })
+          .then((existingUser) => {
+            console.log('inside findOne');
             if (existingUser) {
+              console.log('user exists');
               //if they exist, get them
               done(null, existingUser);
             } else {
+              console.log('creating user');
               // if not, create user in db
               try {
                 newUser = User.create({
-                  email: profile.email,
+                  email: profile._json.email,
                   google: {
                     username: profile.displayName,
                     googleId: profile.id,
                   },
-                }).then((newUser) => {
-                  if (newUser) {
-                    return done(null, newUser);
-                  }
-                  return done(new Error('User object not found'), false);
-                });
+                })
+                  .then((newUser) => {
+                    if (newUser) {
+                      return done(null, newUser);
+                    }
+                    return done(new Error('User object not found'), false);
+                  })
+                  .catch((err) => {
+                    console.log('error in create', err);
+                  });
               } catch (err) {
                 console.log('Error creating user:', err);
                 done(err, null);
               }
             }
-          },
-        );
+          })
+          .finally(() => {
+            console.log('finally');
+          });
       },
     ),
   );
