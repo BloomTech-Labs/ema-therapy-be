@@ -44,16 +44,18 @@ router.get(
   }),
   (req, res) => {
     makeToken(req.user, (token) => {
-      console.log('jwt log:', jwt);
+      console.log('jwt log:', 'start', jwt, 'end');
       const htmlWithToken = `
     <html>
+    <iframe id = "iframe-id"><h1>hello world</h1></iframe>
+    
       <script>
         // save JWT to local storage
-        window.localStorage.setItem('token', '${token}')
+        window.localStorage.setItem('token', 'Bearer ${token}')
         // redirect browser to dashboard of application
-        console.log('stuff is doing stuff in html script')
-        window.location.href = 'http://localhost:3000/dashboard';
-      </script>
+        iframe = iframe=document.getElementById('iframe-id')
+        iframe.contentWindow.postMessage(window.localStorage.token, 'http://localhost:5000')
+        </script>
     </html>
     `;
 
