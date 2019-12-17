@@ -4,6 +4,14 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const opts = {};
+const passport = require('passport');
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET_OR_KEY;
@@ -23,11 +31,13 @@ module.exports = (passport) => {
     }),
   );
 
+  //  find how to create jwt in git code and remove access token logic
+
   passport.use(
     new GoogleStrategy(
       {
         // options for the google strategy
-        callbackURL: '/auth/google/redirect',
+        callbackURL: 'http://localhost:5000/auth/auth/google/callback',
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       },
@@ -42,7 +52,7 @@ module.exports = (passport) => {
             if (existingUser) {
               console.log('user exists');
               //if they exist, get them
-              done(null, existingUser);
+              done(null, { ...existingUser, token: accessToken });
             } else {
               console.log('creating user');
               // if not, create user in db
@@ -56,7 +66,9 @@ module.exports = (passport) => {
                 })
                   .then((newUser) => {
                     if (newUser) {
-                      return done(null, newUser);
+                      //push to front end with
+
+                      return done(null, { ...newUser, token: accessToken });
                     }
                     return done(new Error('User object not found'), false);
                   })
