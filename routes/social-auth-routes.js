@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const { FRONTEND_ROOT_DOMAIN } = require('./auth-routes');
+const { FRONTEND_ROOT_DOMAIN } = require('../config/auth-config');
 
 // makes a token for sending via URL param
 const makeUrlToken = (user, cb) => {
