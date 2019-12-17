@@ -36,7 +36,6 @@ GET Users
 {
   users {
     id
-    sub
     email
     firstName
     lastName
@@ -55,13 +54,12 @@ GET Users
 }
 ```
 
-GET User By Sub
+GET User By Email
 
 ```graphql
 {
-  user(sub: "google-oauth2|000092941234568391234") {
+  user(email: "example@email.com") {
     id
-    sub
     email
     firstName
     lastName
@@ -152,7 +150,6 @@ mutation {
 ```
 {
   id: UUID
-  sub: STRING
   email: STRING
   firstName: STRING
   lastName: STRING
@@ -212,6 +209,9 @@ create a .env file that includes the following:
     *  PORT - dynamic port the server is listening on
     *  MONGODB_URI - MongoDB connection string
     *  NODE_ENV - Node environment
+    *  SECRET_OR_KEY - Shh, it's a secret
+    *  GOOGLE_CLIENT_SECRET - For connecting with Google auth
+    *  GOOGLE_CLIENT_ID - Also for connecting with Google auth
 
 ## Contributing
 

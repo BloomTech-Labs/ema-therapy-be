@@ -25,7 +25,6 @@ describe('multiple users query', () => {
       users {
         id
         email
-        sub
         firstName
         lastName
         createdAt
@@ -34,7 +33,6 @@ describe('multiple users query', () => {
     const mockUser1 = {
       id: '8675309',
       email: 'test@help.com',
-      sub: 'fakeSub',
       firstName: 'testy',
       lastName: 'mctestface',
       createdAt: `${Date.now()}`,
@@ -42,7 +40,6 @@ describe('multiple users query', () => {
     const mockUser2 = {
       id: 'pain',
       email: 'graphql@sucks.com',
-      sub: 'shouldHaveBeenAnOptometrist',
       firstName: 'why',
       lastName: 'noooooooo',
       createdAt: `${Date.now()}`,
@@ -75,17 +72,15 @@ describe('single user query', () => {
     const mockUser1 = {
       id: '867530900',
       email: 'test2@help.com',
-      sub: 'fakeSub2',
       firstName: 'testy2',
       lastName: 'mctestface2',
       createdAt: `${Date.now()}`,
     };
 
     const query = `{
-      user(sub: "${mockUser1.sub}") {
+      user(email: "${mockUser1.email}") {
         id
         email
-        sub
         firstName
         lastName
         createdAt
@@ -122,21 +117,19 @@ describe('single user query', () => {
 
     const mockUser1 = {
       email: 'e@mail.com',
-      sub: 'fakeSubID',
       firstName: 'Jonathan',
       lastName: 'Taylor',
     };
 
     const query = `{
-      user(sub: "${mockUser1.sub}", email: "${mockUser1.email}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}") {
+      user(email: "${mockUser1.email}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}") {
         email
-        sub
         firstName
         lastName
       }
     }`;
 
-    jest.spyOn(User, 'findOne').mockImplementation((searchParams) => {
+    jest.spyOn(User, 'findOne').mockImplementation(() => {
       return {
         exec: () => {
           // Return null user upon findOne execution
@@ -173,20 +166,18 @@ describe('add user mutation', () => {
       isSharingLocation: true,
       firstName: 'testy',
       lastName: 'mctestface',
-      sub: 'fakeSub',
       createdAt: `${Date.now()}`,
     };
 
     const query = `
       {
-        addUser(email: "${mockUser1.email}", sub: "${mockUser1.sub}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}"){
+        addUser(email: "${mockUser1.email}", firstName: "${mockUser1.firstName}", lastName: "${mockUser1.lastName}"){
           id
           firstName
           lastName
           isSharingLocation
           email
           createdAt
-          sub
         }
       }
     `;
@@ -221,7 +212,6 @@ describe('updateIsSharingLocation mutation', () => {
       isSharingLocation: true,
       firstName: 'testy',
       lastName: 'mctestface',
-      sub: 'fakeSub',
       createdAt: `${Date.now()}`,
     };
 

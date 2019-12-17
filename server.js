@@ -3,35 +3,48 @@ const graphqlHTTP = require('express-graphql');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
 const schema = require('./schema/schema');
-const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = require('./config/auth-config');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const authRoutes = require('./routes/auth-routes');
+const socialAuthRoutes = require('./routes/social-auth-routes');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// Middlware
+// Middleware
 app.use(cors());
 app.use(helmet());
 app.use(morgan('combined'));
-
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
   }),
+);
+app.use(bodyParser.json());
 
-  // Validate the audience and the issuer.
-  audience: AUTH0_AUDIENCE,
-  issuer: `https://${AUTH0_DOMAIN}/`,
-  algorithms: ['RS256'],
+// Passport initialize
+app.use(passport.initialize());
+require('./config/passport-config.js')(passport);
+
+// Rate Limit
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
 });
 
+const backendLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  max: 1000,
+  message: 'Too many attempts, please try again after an hour',
+});
+
+// routes
+app.use('/auth', authLimiter, [authRoutes, socialAuthRoutes]);
 app.use(
   '/backend',
-  checkJwt,
+  backendLimiter,
+  // passport.authenticate('jwt', { session: false }),
   graphqlHTTP({
     schema,
     graphiql: true,
