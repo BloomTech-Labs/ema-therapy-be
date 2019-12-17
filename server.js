@@ -44,7 +44,7 @@ app.use('/auth', authLimiter, [authRoutes, socialAuthRoutes]);
 app.use(
   '/backend',
   backendLimiter,
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   graphqlHTTP({
     schema,
     graphiql: true,
