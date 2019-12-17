@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const makeToken = (user, cb) => {
   let payload = {
@@ -8,6 +9,21 @@ const makeToken = (user, cb) => {
     firstName: user.firstName,
     lastName: user.lastName,
   };
+
+  console.log('payload is: ', payload);
+
+  // Sign token
+  jwt.sign(
+    payload,
+    process.env.SECRET_OR_KEY,
+    {
+      expiresIn: 60 * 60 * 24 * 7, // 1 week in seconds
+    },
+    (err, token) => {
+      if (err) throw err;
+      cb(token);
+    },
+  );
 };
 
 // auth with google
@@ -30,9 +46,9 @@ router.get(
   passport.authenticate('google', { failureRedirect: '/', session: false }),
 
   function(req, res) {
-    console.log('hello', req.user.token);
-    const token = req.user.token;
-    res.redirect('http://localhost:3000?token=' + token);
+    makeToken(req.user, (token) => {
+      res.redirect('http://localhost:3000?token=' + token);
+    });
   },
 );
 
