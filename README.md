@@ -74,6 +74,12 @@ GET User By Email
       userId
       weather
     }
+     tasks{
+      id
+      completedAt
+      prompt
+      inputList    //returns an array of strings
+    }
   }
 }
 ```
@@ -137,6 +143,23 @@ mutation {
     anxietyLevel
     sleep
     createdAt
+  }
+}
+```
+
+addTask by User ID
+
+```graphql
+mutation {
+  addTask(
+    userId: "abcd1234jkflgdddajteoaj"
+    prompt: "I am statements"
+    inputList: ["awesome", "cool", "nerdy", "funny"]
+  ) {
+    id
+    completedAt
+    prompt
+    inputList
   }
 }
 ```

@@ -9,7 +9,7 @@ const {
 
 const { addMoodField, removeMoodField, editMoodField } = require('./moods');
 
-const { addTaskField, addTaskInputField } = require('./tasks');
+const { addTaskField } = require('./tasks');
 
 const { GraphQLObjectType, GraphQLSchema } = graphql;
 
@@ -31,7 +31,6 @@ const Mutation = new GraphQLObjectType({
     removeMood: removeMoodField,
     editMood: editMoodField,
     addTask: addTaskField,
-    addTaskInput: addTaskInputField,
   },
 });
 
