@@ -153,6 +153,11 @@ mutation {
   email: STRING
   firstName: STRING
   lastName: STRING
+  isSharingLocation: BOOLEAN
+  google: {
+    username: STRING
+    googleId: STRING
+  }
   createdAt: TIMESTAMP
 }
 ```
@@ -209,7 +214,7 @@ create a .env file that includes the following:
     *  PORT - dynamic port the server is listening on
     *  MONGODB_URI - MongoDB connection string
     *  NODE_ENV - Node environment
-    *  SECRET_OR_KEY - Shh, it's a secret
+    *  JWT_TOKEN_SECRET - Shh, it's a secret
     *  GOOGLE_CLIENT_SECRET - For connecting with Google auth
     *  GOOGLE_CLIENT_ID - Also for connecting with Google auth
 
@@ -252,5 +257,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/ema-therapy-fe/blob/master/README.md) for details on the fronend of our project.
 🚫 Add DS iOS and/or Andriod links here if applicable.
