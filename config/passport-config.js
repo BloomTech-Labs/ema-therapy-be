@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const opts = {};
 const passport = require('passport');
+const { BACKEND_ROOT_DOMAIN } = require('./auth-config');
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -14,7 +15,7 @@ passport.deserializeUser(function(user, done) {
 });
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.SECRET_OR_KEY;
+opts.secretOrKey = process.env.JWT_TOKEN_SECRET;
 
 module.exports = (passport) => {
   passport.use(
@@ -31,30 +32,23 @@ module.exports = (passport) => {
     }),
   );
 
-  //  find how to create jwt in git code and remove access token logic
-
   passport.use(
     new GoogleStrategy(
       {
         // options for the google strategy
-        callbackURL: 'http://localhost:5000/auth/auth/google/callback',
+        callbackURL: BACKEND_ROOT_DOMAIN + '/auth/google/redirect',
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       },
       (accessToken, refreshToken, profile, done) => {
-        console.log('inside GoogleStrategy');
-        console.log('google profile', profile);
         // passport callback function
         // check if user already exists
         User.findOne({ google: { googleId: profile.id } })
           .then((existingUser) => {
-            console.log('inside findOne');
             if (existingUser) {
-              console.log('user exists');
               //if they exist, get them
-              done(null, { ...existingUser, token: accessToken });
+              done(null, existingUser);
             } else {
-              console.log('creating user');
               // if not, create user in db
               try {
                 newUser = User.create({
@@ -67,8 +61,7 @@ module.exports = (passport) => {
                   .then((newUser) => {
                     if (newUser) {
                       //push to front end with
-
-                      return done(null, { ...newUser, token: accessToken });
+                      return done(null, newUser);
                     }
                     return done(new Error('User object not found'), false);
                   })

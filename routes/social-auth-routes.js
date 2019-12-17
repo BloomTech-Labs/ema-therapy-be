@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const { FRONTEND_ROOT_DOMAIN } = require('./auth-routes');
 
-const makeToken = (user, cb) => {
+// makes a token for sending via URL param
+const makeUrlToken = (user, cb) => {
   let payload = {
     email: user.email,
     firstName: user.firstName,
@@ -26,7 +28,7 @@ const makeToken = (user, cb) => {
   );
 };
 
-// auth with google
+// endpoint that redirects to google authentication
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -35,19 +37,19 @@ router.get(
   }),
 );
 
-/* GET Google Authentication API. */
-// router.get(
-//   "/auth/google",
-//   passport.authenticate("google", { scope: ["profile", "email"], session:false })
-// );
-
+// endpoint for google to give back profile and email
 router.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/', session: false }),
+  '/google/redirect',
+  passport.authenticate('google', {
+    failureRedirect: '/',
+    scope: ['profile', 'email'],
+    session: false,
+  }),
 
   function(req, res) {
-    makeToken(req.user, (token) => {
-      res.redirect('http://localhost:3000?token=' + token);
+    // this function takes the user and makes a token
+    makeUrlToken(req.user, (token) => {
+      res.redirect(FRONTEND_ROOT_DOMAIN + '?token=' + token);
     });
   },
 );
