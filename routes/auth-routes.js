@@ -21,7 +21,7 @@ const sendToken = (user, res) => {
   // Sign token
   jwt.sign(
     payload,
-    process.env.SECRET_OR_KEY,
+    process.env.JWT_TOKEN_SECRET,
     {
       expiresIn: 60 * 60 * 24 * 7, // 1 week in seconds
     },
