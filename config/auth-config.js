@@ -12,7 +12,7 @@ if (NODE_ENV === 'development') {
   BACKEND_ROOT_DOMAIN = 'https://moodmuse-production.herokuapp.com';
   FRONTEND_ROOT_DOMAIN = 'https://moodbloomapp.com';
 } else if (NODE_ENV === 'staging') {
-  BACKEND_ROOT_DOMAIN = 'http://localhost:5000';
+  BACKEND_ROOT_DOMAIN = 'https://moodmuse.herokuapp.com';
   FRONTEND_ROOT_DOMAIN = 'https://moodmuse-staging.netlify.com';
 }
 
