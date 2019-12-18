@@ -22,6 +22,7 @@ module.exports = (passport) => {
     new JwtStrategy(opts, (jwt_payload, done) => {
       User.findOne({ email: jwt_payload.email })
         .then((user) => {
+          console.log('user in JWT strategy', user);
           if (user) {
             return done(null, user);
           }
@@ -41,12 +42,20 @@ module.exports = (passport) => {
       },
       (accessToken, refreshToken, profile, done) => {
         // passport callback function
-        // check if user already exists
-        User.findOne({ google: { googleId: profile.id } })
+        // check if user already exists using email instead of googleId
+        User.findOne({ email: profile._json.email })
           .then((existingUser) => {
+            console.log('profile in passport', profile);
             if (existingUser) {
-              //if they exist, get them
-              done(null, existingUser);
+              // if password exists then user has local account
+              if (existingUser.password) {
+                existingUser.google.username = profile.displayName;
+                existingUser.google.googleId = profile.id;
+                done(null, existingUser);
+              } else {
+                //if password does not exist, continue login as Google user
+                done(null, existingUser);
+              }
             } else {
               // if not, create user in db
               try {
