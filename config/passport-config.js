@@ -22,7 +22,6 @@ module.exports = (passport) => {
     new JwtStrategy(opts, (jwt_payload, done) => {
       User.findOne({ email: jwt_payload.email })
         .then((user) => {
-          console.log('user in JWT strategy', user);
           if (user) {
             return done(null, user);
           }
@@ -45,7 +44,6 @@ module.exports = (passport) => {
         // check if user already exists using email instead of googleId
         User.findOne({ email: profile._json.email })
           .then((existingUser) => {
-            console.log('profile in passport', profile);
             if (existingUser) {
               // if password exists then user has local account
               if (existingUser.password) {
