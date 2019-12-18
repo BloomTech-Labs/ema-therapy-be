@@ -51,6 +51,7 @@ module.exports = (passport) => {
               if (existingUser.password) {
                 existingUser.google.username = profile.displayName;
                 existingUser.google.googleId = profile.id;
+                existingUser.save();
                 done(null, existingUser);
               } else {
                 //if password does not exist, continue login as Google user
