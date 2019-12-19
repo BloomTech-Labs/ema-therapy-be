@@ -41,12 +41,20 @@ module.exports = (passport) => {
       },
       (accessToken, refreshToken, profile, done) => {
         // passport callback function
-        // check if user already exists
-        User.findOne({ google: { googleId: profile.id } })
+        // check if user already exists using email instead of googleId
+        User.findOne({ email: profile._json.email })
           .then((existingUser) => {
             if (existingUser) {
-              //if they exist, get them
-              done(null, existingUser);
+              // if password exists then user has local account
+              if (existingUser.password) {
+                existingUser.google.username = profile.displayName;
+                existingUser.google.googleId = profile.id;
+                existingUser.save();
+                done(null, existingUser);
+              } else {
+                //if password does not exist, continue login as Google user
+                done(null, existingUser);
+              }
             } else {
               // if not, create user in db
               try {
