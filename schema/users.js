@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 const User = require('../models/user');
 const { MoodsField } = require('./moods');
+const { TasksField } = require('./tasks');
 
 const {
   GraphQLObjectType,
@@ -21,6 +22,7 @@ const UserType = new GraphQLObjectType({
     createdAt: { type: GraphQLString },
     isSharingLocation: { type: GraphQLBoolean },
     moods: MoodsField,
+    tasks: TasksField,
   }),
 });
 
