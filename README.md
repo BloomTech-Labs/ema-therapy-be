@@ -1,14 +1,8 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by. Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric. Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
 
-#### 1️⃣ Backend deployed at Heroku: https://moodmuse-production.herokuapp.com/backend <br>
+## Backend deployed at Heroku: <https://moodmuse-production.herokuapp.com/backend>
 
-Staging env is deployed at: https://moodmuse.herokuapp.com/
+Staging env is deployed at: <https://moodmuse.herokuapp.com/>
 
 Access GraphQL with the endpoint `/backend`. Database requires an Auth token.
 
@@ -164,40 +158,45 @@ mutation {
 }
 ```
 
-# Data Model
+## Data Model
 
-#### 2️⃣ USERS
-
----
-
-```
-{
-  id: UUID
-  email: STRING
-  firstName: STRING
-  lastName: STRING
-  createdAt: TIMESTAMP
-}
-```
-
-#### MOOD ENTRIES
+### USERS
 
 ---
 
-```
+```javascript
 {
-  id: UUID
-  mood: INT
-  text: STRING
-  anxietyLevel: INT
-  sleep: DOUBLE/FLOAT
-  createdAt: TIMESTAMP
-  userId: STRING
-  weather: STRING
+  id: UUID;
+  email: STRING;
+  firstName: STRING;
+  lastName: STRING;
+  isSharingLocation: BOOLEAN;
+  google: {
+    username: STRING;
+    googleId: STRING;
+  }
+  createdAt: TIMESTAMP;
 }
 ```
 
-## 2️⃣ Actions
+### MOOD ENTRIES
+
+---
+
+```javascript
+{
+  id: UUID;
+  mood: INT;
+  text: STRING;
+  anxietyLevel: INT;
+  sleep: DOUBLE / FLOAT;
+  createdAt: TIMESTAMP;
+  userId: STRING;
+  weather: STRING;
+}
+```
+
+### Actions
 
 🚫 This is an example, replace this with the actions that pertain to your backend
 
@@ -210,9 +209,7 @@ mutation {
 `updateOrg(orgId)` -> Update an organization by ID
 
 `deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
+
 `getUsers(orgId)` -> if no param all users
 
 `getUser(userId)` -> Returns a single user by user ID
@@ -223,18 +220,20 @@ mutation {
 
 `deleteUser(userId)` -> deletes everything dependent on the user
 
-## 3️⃣ Environment Variables
+### Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
 
+```none
     *  PORT - dynamic port the server is listening on
     *  MONGODB_URI - MongoDB connection string
     *  NODE_ENV - Node environment
-    *  SECRET_OR_KEY - Shh, it's a secret
+    *  JWT_TOKEN_SECRET - Shh, it's a secret
     *  GOOGLE_CLIENT_SECRET - For connecting with Google auth
     *  GOOGLE_CLIENT_ID - Also for connecting with Google auth
+```
 
 ## Contributing
 
@@ -275,5 +274,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/ema-therapy-fe/blob/master/README.md) for details on the fronend of our project.
 🚫 Add DS iOS and/or Andriod links here if applicable.

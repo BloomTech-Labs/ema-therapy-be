@@ -77,6 +77,7 @@ const editMoodField = {
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     mood: { type: new GraphQLNonNull(GraphQLInt) },
+    activities: { type: new GraphQLList(GraphQLString) },
     sleep: { type: GraphQLFloat },
     anxietyLevel: { type: GraphQLInt },
     text: { type: GraphQLString },
