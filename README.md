@@ -68,11 +68,12 @@ GET User By Email
       userId
       weather
     }
-     tasks{
+    tasks {
       id
       completedAt
       prompt
-      inputList    //returns an array of strings
+      text
+      photoUrl
     }
   }
 }
@@ -146,14 +147,16 @@ addTask by User ID
 ```graphql
 mutation {
   addTask(
-    userId: "abcd1234jkflgdddajteoaj"
+    userEmail: "email@gmail.com"
     prompt: "I am statements"
-    inputList: ["awesome", "cool", "nerdy", "funny"]
+    text: "awesome, cool, lovable, talented, generous"
+    photoUrl: "www.coolphoto.com"
   ) {
     id
     completedAt
     prompt
-    inputList
+    text
+    photoUrl
   }
 }
 ```
@@ -193,6 +196,21 @@ mutation {
   createdAt: TIMESTAMP;
   userId: STRING;
   weather: STRING;
+}
+```
+
+### TASK ENTRIES
+
+---
+
+```javascript
+{
+  id: UUID;
+  prompt: STRING;
+  completedAt: TIMESTAMP;
+  userEmail: STRING;
+  text: STRING;
+  photoUrl: STRING;
 }
 ```
 
