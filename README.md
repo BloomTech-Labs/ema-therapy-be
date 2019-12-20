@@ -68,11 +68,12 @@ GET User By Email
       userId
       weather
     }
-     tasks{
+    tasks {
       id
       completedAt
       prompt
-      inputList    //returns an array of strings
+      text
+      photoUrl
     }
   }
 }
@@ -153,7 +154,8 @@ mutation {
     id
     completedAt
     prompt
-    inputList
+    text
+    photoUrl
   }
 }
 ```
