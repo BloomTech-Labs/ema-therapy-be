@@ -14,33 +14,34 @@ const TaskType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     completedAt: { type: GraphQLString },
-    userId: { type: GraphQLID },
+    userEmail: { type: GraphQLString },
     prompt: { type: GraphQLString },
-    // allows you to query the entire list of inputs
-    inputList: { type: new GraphQLList(GraphQLString) },
+    text: { type: GraphQLString },
+    photoUrl: { type: GraphQLString },
   }),
 });
 
 const TasksField = {
   type: new GraphQLList(TaskType),
   resolve(parent, args) {
-    return Task.find({ userId: parent.id });
+    return Task.find({ userEmail: parent.email });
   },
 };
 
 const addTaskField = {
   type: TaskType,
   args: {
-    userId: { type: new GraphQLNonNull(GraphQLID) },
+    userEmail: { type: new GraphQLNonNull(GraphQLString) },
     prompt: { type: new GraphQLNonNull(GraphQLString) },
-    // allows you to save all inputs from task as an array in MongoDB
-    inputList: { type: new GraphQLList(GraphQLString) },
+    text: { type: GraphQLString },
+    photoUrl: { type: GraphQLString },
   },
   resolve(parent, args) {
     let task = new Task({
-      userId: args.userId,
+      userEmail: args.userEmail,
       prompt: args.prompt,
-      inputList: args.inputList,
+      text: args.text,
+      photoUrl: args.photoUrl,
     });
     return task.save();
   },
