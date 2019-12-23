@@ -16,6 +16,7 @@ const MoodType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     mood: { type: GraphQLInt },
+    activities: { type: new GraphQLList(GraphQLString) },
     text: { type: GraphQLString },
     anxietyLevel: { type: GraphQLInt },
     sleep: { type: GraphQLFloat },
@@ -37,6 +38,7 @@ const addMoodField = {
   args: {
     userId: { type: new GraphQLNonNull(GraphQLID) },
     mood: { type: new GraphQLNonNull(GraphQLInt) },
+    activities: { type: new GraphQLList(GraphQLString) },
     sleep: { type: GraphQLFloat },
     anxietyLevel: { type: GraphQLInt },
     text: { type: GraphQLString },
@@ -46,6 +48,7 @@ const addMoodField = {
     const createdMood = await Mood.create({
       userId: args.userId,
       mood: args.mood,
+      activities: args.activities,
       sleep: args.sleep,
       anxietyLevel: args.anxietyLevel,
       text: args.text,
@@ -74,6 +77,7 @@ const editMoodField = {
   args: {
     id: { type: new GraphQLNonNull(GraphQLID) },
     mood: { type: new GraphQLNonNull(GraphQLInt) },
+    activities: { type: new GraphQLList(GraphQLString) },
     sleep: { type: GraphQLFloat },
     anxietyLevel: { type: GraphQLInt },
     text: { type: GraphQLString },
