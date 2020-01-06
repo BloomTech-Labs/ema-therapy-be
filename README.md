@@ -69,6 +69,13 @@ We chose our back-end technology to be flexible and easy to change as needed due
       userId
       weather
     }
+    tasks {
+      id
+      completedAt
+      prompt
+      text
+      photoUrl
+    }
   }
 }
 ```
@@ -141,6 +148,29 @@ mutation {
     anxietyLevel
     sleep
     createdAt
+  }
+}
+```
+
+
+</details>
+
+<details>
+  <summary>addTask by User ID</summary>
+
+```graphql
+mutation {
+  addTask(
+    userEmail: "email@gmail.com"
+    prompt: "I am statements"
+    text: "awesome, cool, lovable, talented, generous"
+    photoUrl: "www.coolphoto.com"
+  ) {
+    id
+    completedAt
+    prompt
+    text
+    photoUrl
   }
 }
 ```
