@@ -152,7 +152,6 @@ mutation {
 }
 ```
 
-
 </details>
 
 <details>
@@ -171,6 +170,19 @@ mutation {
     prompt
     text
     photoUrl
+  }
+}
+```
+
+</details>
+
+<details>
+  <summary>removeTask by task ID</summary>
+
+```graphql
+mutation {
+  removeTask(id: "5dfd2649a9984b24598e73f5") {
+    id
   }
 }
 ```

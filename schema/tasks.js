@@ -47,7 +47,22 @@ const addTaskField = {
   },
 };
 
+const removeTaskField = {
+  type: TaskType,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve(_, args) {
+    const rmTask = Task.findByIdAndRemove(args.id).exec();
+    if (!rmTask) {
+      throw new Error('Could not find task for given id');
+    }
+    return rmTask;
+  },
+};
+
 module.exports = {
   TasksField,
   addTaskField,
+  removeTaskField,
 };
