@@ -86,7 +86,14 @@ const editMoodField = {
   async resolve(_, args) {
     // Only update the fields which are not undefined
     const fieldsToUpdate = {};
-    const fieldNames = ['mood', 'sleep', 'anxietyLevel', 'text', 'weather'];
+    const fieldNames = [
+      'mood',
+      'sleep',
+      'anxietyLevel',
+      'text',
+      'weather',
+      'activities',
+    ];
     for (let i = 0; i < fieldNames.length; i++) {
       let fieldName = fieldNames[i];
       if (typeof args[fieldName] !== 'undefined') {

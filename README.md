@@ -1,12 +1,12 @@
 # API Documentation
 
-## Backend deployed at Heroku: <https://moodmuse-production.herokuapp.com/backend>
+<strong>Backend deployed at Heroku:</strong> <https://moodmuse-production.herokuapp.com/backend>
 
-Staging env is deployed at: <https://moodmuse.herokuapp.com/>
+<strong>Staging env is deployed at:</strong> <https://moodmuse.herokuapp.com/>
 
 Access GraphQL with the endpoint `/backend`. Database requires an Auth token.
 
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
@@ -17,14 +17,12 @@ To get the server running locally:
 
 ### Node.js, Express, GraphQL, MongoDB/Mongoose
 
-- We chose our back-end technology to be flexible and easy to change as needed due to our project being a greenfield project. We knew that lots of changes will occur as the application develops and wanted to make setting up the database quick and painless.
-- Point Two
-- Point Three
-- Point Four
+We chose our back-end technology to be flexible and easy to change as needed due to our project being a greenfield project. We knew that lots of changes will occur as the application develops and wanted to make setting up the database quick and painless.
 
-## 2️⃣ Queries
+## Queries
 
-GET Users
+<details>
+<summary>GET Users</summary>
 
 ```graphql
 {
@@ -48,7 +46,10 @@ GET Users
 }
 ```
 
-GET User By Email
+</details>
+
+<details>
+<summary>GET User By Email</summary>
 
 ```graphql
 {
@@ -79,9 +80,12 @@ GET User By Email
 }
 ```
 
+</details>
+
 ## Mutations
 
-addMood by User ID
+<details>
+<summary>addMood by User ID</summary>
 
 ```graphql
 mutation {
@@ -105,7 +109,10 @@ mutation {
 }
 ```
 
-removeMood by Mood ID
+</details>
+
+<details>
+<summary>removeMood by Mood ID</summary>
 
 ```graphql
 mutation {
@@ -121,7 +128,10 @@ mutation {
 }
 ```
 
-editMood by Mood ID
+</details>
+
+<details>
+<summary>editMood by Mood ID</summary>
 
 ```graphql
 mutation {
@@ -142,7 +152,10 @@ mutation {
 }
 ```
 
-addTask by User ID
+</details>
+
+<details>
+  <summary>addTask by User ID</summary>
 
 ```graphql
 mutation {
@@ -160,6 +173,21 @@ mutation {
   }
 }
 ```
+
+</details>
+
+<details>
+  <summary>removeTask by task ID</summary>
+
+```graphql
+mutation {
+  removeTask(id: "5dfd2649a9984b24598e73f5") {
+    id
+  }
+}
+```
+
+</details>
 
 ## Data Model
 
@@ -198,45 +226,6 @@ mutation {
   weather: STRING;
 }
 ```
-
-### TASK ENTRIES
-
----
-
-```javascript
-{
-  id: UUID;
-  prompt: STRING;
-  completedAt: TIMESTAMP;
-  userEmail: STRING;
-  text: STRING;
-  photoUrl: STRING;
-}
-```
-
-### Actions
-
-🚫 This is an example, replace this with the actions that pertain to your backend
-
-`getOrgs()` -> Returns all organizations
-
-`getOrg(orgId)` -> Returns a single organization by ID
-
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
 
 ### Environment Variables
 
@@ -292,5 +281,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](https://github.com/Lambda-School-Labs/ema-therapy-fe/blob/master/README.md) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/ema-therapy-fe/blob/master/README.md) for details on the front end of our project.
